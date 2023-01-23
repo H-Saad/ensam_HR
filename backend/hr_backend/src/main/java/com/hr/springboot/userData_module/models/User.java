@@ -1,5 +1,6 @@
 package com.hr.springboot.userData_module.models;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -29,7 +30,8 @@ public class User {
 	private String genre;
 	private String email;
 	private String password;
-	private Date date_naissance;
+	private String cin;
+	private LocalDate date_naissance;
 	private String lieu_naissance;
 	private String code_nationalite;
 	private int code_grade;
@@ -43,9 +45,9 @@ public class User {
 		}
 	)
 	private Set<Type_personnel> type_personnel;
-	private Date date_recrutement;
-	private Date date_affectation_MESRSFC;
-	private Date date_affectation_enseignement;
+	private LocalDate date_recrutement;
+	private LocalDate date_affectation_MESRSFC;
+	private LocalDate date_affectation_enseignement;
 	private int code_departement;
 	private String departement;
 	private int nombre_diplomes;
@@ -55,9 +57,9 @@ public class User {
 	private String fonction_exerce;
 	private String service_affectation;
 	private String grade;
-	private Date date_effet_grade;
+	private LocalDate date_effet_grade;
 	private String echelon;
-	private Date date_effet_echelon;
+	private LocalDate date_effet_echelon;
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinTable(name="USER_ROLE",
 		joinColumns = {
@@ -69,26 +71,22 @@ public class User {
 	)
 	private Set<Role> role;
 	private boolean disabled;
+	private String AR_nom;
+	private String AR_prenom;
+	private String num_tel;
 	
 	public User() {
-		this.date_naissance = new Date();
-		this.date_recrutement = new Date();
-		this.date_affectation_MESRSFC = new Date();
-		this.date_affectation_enseignement = new Date();
-		this.date_effet_echelon = new Date();
-		this.date_effet_grade = new Date();
 		this.disabled = false;
 	}
-	
-	
 
 	public User(int id, int code_etablissement, int code_annee, int ppr, String nom, String prenom, String genre,
-			String email, String password, Date date_naissance, String lieu_naissance, String code_nationalite,
-			int code_grade, Set<Type_personnel> type_personnel, Date date_recrutement, Date date_affectation_MESRSFC,
-			Date date_affectation_enseignement, int code_departement, String departement, int nombre_diplomes,
-			String diplome, String specialite, String univ_etablissement_diplomate, String fonction_exerce,
-			String service_affectation, String grade, Date date_effet_grade, String echelon, Date date_effet_echelon,
-			Set<Role> role, boolean disabled) {
+			String email, String password, String cin, LocalDate date_naissance, String lieu_naissance,
+			String code_nationalite, int code_grade, Set<Type_personnel> type_personnel, LocalDate date_recrutement,
+			LocalDate date_affectation_MESRSFC, LocalDate date_affectation_enseignement, int code_departement,
+			String departement, int nombre_diplomes, String diplome, String specialite,
+			String univ_etablissement_diplomate, String fonction_exerce, String service_affectation, String grade,
+			LocalDate date_effet_grade, String echelon, LocalDate date_effet_echelon, Set<Role> role, boolean disabled,
+			String aR_nom, String aR_prenom, String num_tel) {
 		super();
 		this.id = id;
 		this.code_etablissement = code_etablissement;
@@ -99,6 +97,7 @@ public class User {
 		this.genre = genre;
 		this.email = email;
 		this.password = password;
+		this.cin = cin;
 		this.date_naissance = date_naissance;
 		this.lieu_naissance = lieu_naissance;
 		this.code_nationalite = code_nationalite;
@@ -121,22 +120,9 @@ public class User {
 		this.date_effet_echelon = date_effet_echelon;
 		this.role = role;
 		this.disabled = disabled;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
+		AR_nom = aR_nom;
+		AR_prenom = aR_prenom;
+		this.num_tel = num_tel;
 	}
 
 	public int getId() {
@@ -195,11 +181,35 @@ public class User {
 		this.genre = genre;
 	}
 
-	public Date getDate_naissance() {
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getCin() {
+		return cin;
+	}
+
+	public void setCin(String cin) {
+		this.cin = cin;
+	}
+
+	public LocalDate getDate_naissance() {
 		return date_naissance;
 	}
 
-	public void setDate_naissance(Date date_naissance) {
+	public void setDate_naissance(LocalDate date_naissance) {
 		this.date_naissance = date_naissance;
 	}
 
@@ -227,27 +237,35 @@ public class User {
 		this.code_grade = code_grade;
 	}
 
-	public Date getDate_recrutement() {
+	public Set<Type_personnel> getType_personnel() {
+		return type_personnel;
+	}
+
+	public void setType_personnel(Set<Type_personnel> type_personnel) {
+		this.type_personnel = type_personnel;
+	}
+
+	public LocalDate getDate_recrutement() {
 		return date_recrutement;
 	}
 
-	public void setDate_recrutement(Date date_recrutement) {
+	public void setDate_recrutement(LocalDate date_recrutement) {
 		this.date_recrutement = date_recrutement;
 	}
 
-	public Date getDate_affectation_MESRSFC() {
+	public LocalDate getDate_affectation_MESRSFC() {
 		return date_affectation_MESRSFC;
 	}
 
-	public void setDate_affectation_MESRSFC(Date date_affectation_MESRSFC) {
+	public void setDate_affectation_MESRSFC(LocalDate date_affectation_MESRSFC) {
 		this.date_affectation_MESRSFC = date_affectation_MESRSFC;
 	}
 
-	public Date getDate_affectation_enseignement() {
+	public LocalDate getDate_affectation_enseignement() {
 		return date_affectation_enseignement;
 	}
 
-	public void setDate_affectation_enseignement(Date date_affectation_enseignement) {
+	public void setDate_affectation_enseignement(LocalDate date_affectation_enseignement) {
 		this.date_affectation_enseignement = date_affectation_enseignement;
 	}
 
@@ -323,11 +341,11 @@ public class User {
 		this.grade = grade;
 	}
 
-	public Date getDate_effet_grade() {
+	public LocalDate getDate_effet_grade() {
 		return date_effet_grade;
 	}
 
-	public void setDate_effet_grade(Date date_effet_grade) {
+	public void setDate_effet_grade(LocalDate date_effet_grade) {
 		this.date_effet_grade = date_effet_grade;
 	}
 
@@ -339,20 +357,12 @@ public class User {
 		this.echelon = echelon;
 	}
 
-	public Date getDate_effet_echelon() {
+	public LocalDate getDate_effet_echelon() {
 		return date_effet_echelon;
 	}
 
-	public void setDate_effet_echelon(Date date_effet_echelon) {
+	public void setDate_effet_echelon(LocalDate date_effet_echelon) {
 		this.date_effet_echelon = date_effet_echelon;
-	}
-
-	public Set<Type_personnel> getType_personnel() {
-		return type_personnel;
-	}
-
-	public void setType_personnel(Set<Type_personnel> type_personnel) {
-		this.type_personnel = type_personnel;
 	}
 
 	public Set<Role> getRole() {
@@ -370,4 +380,30 @@ public class User {
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
 	}
+
+	public String getAR_nom() {
+		return AR_nom;
+	}
+
+	public void setAR_nom(String aR_nom) {
+		AR_nom = aR_nom;
+	}
+
+	public String getAR_prenom() {
+		return AR_prenom;
+	}
+
+	public void setAR_prenom(String aR_prenom) {
+		AR_prenom = aR_prenom;
+	}
+
+	public String getNum_tel() {
+		return num_tel;
+	}
+
+	public void setNum_tel(String num_tel) {
+		this.num_tel = num_tel;
+	}
+	
+	
 }
