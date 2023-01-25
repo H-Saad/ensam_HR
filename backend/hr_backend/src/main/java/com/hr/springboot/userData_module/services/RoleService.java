@@ -1,5 +1,7 @@
 package com.hr.springboot.userData_module.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +18,11 @@ public class RoleService {
 		return rr.save(role);
 	}
 	
+	public List<Role> getRoles(){
+		return rr.findAll();
+	}
+	
+	public Role getRole(String role) {
+		return rr.findById(role).get();
+	}
 }

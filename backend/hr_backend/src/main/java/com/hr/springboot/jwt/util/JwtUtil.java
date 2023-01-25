@@ -3,10 +3,16 @@ package com.hr.springboot.jwt.util;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.hr.springboot.userData_module.models.Role;
+import com.hr.springboot.userData_module.models.User;
+import com.hr.springboot.userData_module.repositories.UserRepo;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,6 +20,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtUtil {
+	
+	@Autowired
+	private UserRepo ur;
 
     private static final String SECRET_KEY = "pls_work";
 
@@ -57,5 +66,15 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
+    }
+    
+    public Set<Role> getUserAuthority(String token){
+    	String mail = getUsernameFromToken(token.substring(7));
+    	return ur.findByMail(mail).get().getRole();
+    }
+    
+    public User getUserfromToken(String token) {
+    	String mail = getUsernameFromToken(token.substring(7));
+    	return ur.findByMail(mail).get();
     }
 }

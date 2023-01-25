@@ -1,7 +1,6 @@
 package com.hr.springboot.userData_module.models;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -404,6 +403,22 @@ public class User {
 	public void setNum_tel(String num_tel) {
 		this.num_tel = num_tel;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", code_etablissement=" + code_etablissement + ", code_annee=" + code_annee + ", ppr="
+				+ ppr + ", nom=" + nom + ", prenom=" + prenom + ", genre=" + genre + ", email=" + email + ", password="
+				+ password + ", cin=" + cin + ", date_naissance=" + date_naissance + ", lieu_naissance="
+				+ lieu_naissance + ", code_nationalite=" + code_nationalite + ", code_grade=" + code_grade
+				+ ", type_personnel=" + type_personnel + ", date_recrutement=" + date_recrutement
+				+ ", date_affectation_MESRSFC=" + date_affectation_MESRSFC + ", date_affectation_enseignement="
+				+ date_affectation_enseignement + ", code_departement=" + code_departement + ", departement="
+				+ departement + ", nombre_diplomes=" + nombre_diplomes + ", diplome=" + diplome + ", specialite="
+				+ specialite + ", univ_etablissement_diplomate=" + univ_etablissement_diplomate + ", fonction_exerce="
+				+ fonction_exerce + ", service_affectation=" + service_affectation + ", grade=" + grade
+				+ ", date_effet_grade=" + date_effet_grade + ", echelon=" + echelon + ", date_effet_echelon="
+				+ date_effet_echelon + ", role=" + role + ", disabled=" + disabled + ", AR_nom=" + AR_nom
+				+ ", AR_prenom=" + AR_prenom + ", num_tel=" + num_tel + "]";
+	}
 	
 }

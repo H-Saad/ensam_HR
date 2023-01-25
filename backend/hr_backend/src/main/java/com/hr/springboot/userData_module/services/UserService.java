@@ -1,5 +1,6 @@
 package com.hr.springboot.userData_module.services;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,8 +67,18 @@ public class UserService {
 		
 	
 		User u1 = new User();
+		u1.setNom("Hadiche");
+		u1.setPrenom("Saad");
+		u1.setGenre("masculin");
 		u1.setEmail("user@gmail.com");
 		u1.setPassword(getEncodedPassword("user"));
+		u1.setPpr(12932);
+		u1.setCin("BB124343");
+		u1.setDate_naissance(LocalDate.of(2000, 10, 10));
+		u1.setLieu_naissance("Casablanca");
+		u1.setFonction_exerce("Professeur d'enseignement superieur");
+		u1.setGrade("No clue");
+
 		Set<Role> temp1 = new HashSet<Role>();
 		temp1.add(userRole);
 		Set<Type_personnel> temp2 = new HashSet<Type_personnel>();

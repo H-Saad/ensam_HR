@@ -1,16 +1,20 @@
 package com.hr.springboot.service_module.models;
 
-public class Vars {
+/**
+ * @author Speedlight
+ *
+ */
+public class Var {
 	private String varname;
 	private String vartype;
 	private String description;
 	private boolean needs_form;
 	
-	public Vars() {
+	public Var() {
 		
 	}
 
-	public Vars(String varname, String vartype, String description, boolean needs_form) {
+	public Var(String varname, String vartype, String description, boolean needs_form) {
 		super();
 		this.varname = varname;
 		this.vartype = vartype;
@@ -48,6 +52,12 @@ public class Vars {
 
 	public void setNeeds_form(boolean needs_form) {
 		this.needs_form = needs_form;
+	}
+
+	@Override
+	public String toString() {
+		return "Var [varname=" + varname + ", vartype=" + vartype + ", description=" + description + ", needs_form="
+				+ needs_form + "]";
 	}
 	
 }
