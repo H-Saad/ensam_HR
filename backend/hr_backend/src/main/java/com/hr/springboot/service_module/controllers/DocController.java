@@ -24,6 +24,7 @@ import com.hr.springboot.service_module.models.Document;
 import com.hr.springboot.service_module.repositories.DocRepo;
 import com.hr.springboot.service_module.services.DocService;
 import com.hr.springboot.userData_module.models.User;
+import com.hr.springboot.validation_module.services.ValidationService;
 import com.opencsv.exceptions.CsvValidationException;
 
 @RestController
@@ -38,6 +39,9 @@ public class DocController {
 	
 	@Autowired
 	private DocRepo dr;
+	
+	@Autowired
+	private ValidationService vs;
 
 	@PreAuthorize("hasRole('User')" + "|| hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
 	@GetMapping("getAllowed")
@@ -69,6 +73,9 @@ public class DocController {
 		Document d = dr.findById(Integer.parseInt((String)req.get("id"))).get();
 		if(!d.isNeeds_form()) {
 			ds.generate_doc(u, d, ds.getDbMappings(u, d));
+			if(d.isRequires_approval()) {
+				vs.createRequest(u, d);
+			}
 		}
 		else {
 			HashMap<String,String> mappings = new HashMap<String,String>();
@@ -80,6 +87,9 @@ public class DocController {
 			mappings.putAll(temp);
 			mappings.putAll(ds.getDbMappings(u, d));
 			ds.generate_doc(u ,d, mappings);
+			if(d.isRequires_approval()) {
+				vs.createRequest(u, d);
+			}
 		}
 	}
 	
