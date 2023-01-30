@@ -6,11 +6,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hr.springboot.notification_module.services.NotifDict;
+import com.hr.springboot.notification_module.services.NotifService;
 import com.hr.springboot.service_module.models.Document;
 import com.hr.springboot.userData_module.models.User;
+import com.hr.springboot.userData_module.repositories.UserRepo;
 import com.hr.springboot.validation_module.models.Completed_request;
 import com.hr.springboot.validation_module.models.Pending_request;
 import com.hr.springboot.validation_module.models.Refused_request;
+import com.hr.springboot.validation_module.models.Request;
 import com.hr.springboot.validation_module.repositories.CompletedRepo;
 import com.hr.springboot.validation_module.repositories.PendingRepo;
 import com.hr.springboot.validation_module.repositories.RefusedRepo;
@@ -27,13 +31,23 @@ public class ValidationService {
 	@Autowired
 	CompletedRepo cr;
 	
+	@Autowired 
+	NotifService ns;
 	
-	public void createRequest(User u, Document d) {
+	@Autowired
+	NotifDict nd;
+	
+	@Autowired
+	UserRepo ur;
+	
+	
+	public Request createRequest(User u, Document d) {
 		Pending_request p = new Pending_request();
 		p.setUser_id(u.getId());
 		p.setDocument_id(d.getId());
 		p.setDatetime(LocalDateTime.now());
 		pr.save(p);
+		return p;
 	}
 	
 	public void validatel1(Pending_request p, User u) {
@@ -55,12 +69,15 @@ public class ValidationService {
 		p.setL3_id(u.getId());
 		p.setL3_datetime(LocalDateTime.now());
 		pr.save(p);
+		//notifier l'utilisateur que sa requete est approuve
+		ns.makeNotif(u, ur.findById(p.getUser_id()).get(), p, nd.approvedBy(u, p));
 	}
 	
 	public void completeRequest(Pending_request p) {
 		Completed_request c = new Completed_request(p);
 		pr.delete(p);
 		cr.save(c);
+		ns.makeNotif(ur.findById(p.getUser_id()).get(), ur.findById(p.getUser_id()).get(), c, nd.complete(c));
 	}
 	
 	public void refuseRequest(Pending_request p, User u, String refusal_msg) {
@@ -70,6 +87,8 @@ public class ValidationService {
 		rf.setRefusal_datetime(LocalDateTime.now());
 		pr.delete(p);
 		rr.save(rf);
+		//notifier l utilisateur que sa requete est refuse
+		ns.makeNotif(u, ur.findById(p.getUser_id()).get(), rf, nd.refusedBy(u, p));
 	}
 	
 	public List<Pending_request> getUserPending(User u){

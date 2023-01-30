@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Pending_request {
+public class Pending_request implements Request{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

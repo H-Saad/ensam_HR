@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Refused_request {
+public class Refused_request implements Request{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.net.HttpHeaders;
 import com.hr.springboot.jwt.util.JwtUtil;
+import com.hr.springboot.notification_module.services.NotifDict;
+import com.hr.springboot.notification_module.services.NotifService;
 import com.hr.springboot.userData_module.models.User;
+import com.hr.springboot.userData_module.repositories.UserRepo;
 import com.hr.springboot.validation_module.models.Completed_request;
 import com.hr.springboot.validation_module.models.Pending_request;
 import com.hr.springboot.validation_module.models.Refused_request;
@@ -44,6 +47,15 @@ public class ValidationController {
 	
 	@Autowired
 	private CompletedRepo cr;
+	
+	@Autowired
+	private NotifService ns;
+	
+	@Autowired
+	private NotifDict nd;
+	
+	@Autowired
+	private UserRepo ur;
 	
 	@PreAuthorize("hasRole('User')")
 	@GetMapping("UserRefused")
@@ -102,6 +114,10 @@ public class ValidationController {
 		User u = util.getUserfromToken(auth);
 		Pending_request p = pr.findById(id).get();
 		vs.validatel3(p, u);
+		//notifier l'utilisateur qu'il a approuve une requete
+		ns.makeNotif(u, u, p, nd.approve(p));
+		//notifier next layer qu'une requete l'attends
+		ns.makeNotif(u, ur.findByRole("layer2").get(), p, nd.pendingReq(p));
 		return ResponseEntity.status(200).body(new JSONObject());
 	}
 	
@@ -111,6 +127,8 @@ public class ValidationController {
 		User u = util.getUserfromToken(auth);
 		Pending_request p = pr.findById(Integer.parseInt(req.get("id"))).get();
 		vs.refuseRequest(p, u, req.get("refusal_msg"));
+		//notifier l utilisateur qu il a refuse une requete
+		ns.makeNotif(u, u, p, nd.refuse(p));
 		return ResponseEntity.status(200).body(new JSONObject());
 	}
 	
@@ -121,6 +139,9 @@ public class ValidationController {
 		User u = util.getUserfromToken(auth);
 		Pending_request p = pr.findById(id).get();
 		vs.validatel2(p, u);
+		ns.makeNotif(u, u, p, nd.approve(p));
+		//notifier next layer qu'une requete l'attends
+		ns.makeNotif(u, ur.findByRole("layer1").get(), p, nd.pendingReq(p));
 		return ResponseEntity.status(200).body(new JSONObject());
 	}
 	
@@ -130,6 +151,7 @@ public class ValidationController {
 		User u = util.getUserfromToken(auth);
 		Pending_request p = pr.findById(Integer.parseInt(req.get("id"))).get();
 		vs.refuseRequest(p, u, req.get("refusal_msg"));
+		ns.makeNotif(u, u, p, nd.refuse(p));
 		return ResponseEntity.status(200).body(new JSONObject());
 	}
 	
@@ -140,6 +162,7 @@ public class ValidationController {
 		User u = util.getUserfromToken(auth);
 		Pending_request p = pr.findById(id).get();
 		vs.validatel1(p, u);
+		ns.makeNotif(u, u, p, nd.approve(p));
 		p = pr.findById(p.getId()).get();
 		if(p.isApproved_by_l1() && p.isApproved_by_l2() && p.isApproved_by_l3()) {
 			vs.completeRequest(p);
@@ -154,6 +177,7 @@ public class ValidationController {
 		User u = util.getUserfromToken(auth);
 		Pending_request p = pr.findById(Integer.parseInt(req.get("id"))).get();
 		vs.refuseRequest(p, u, req.get("refusal_msg"));
+		ns.makeNotif(u, u, p, nd.refuse(p));
 		return ResponseEntity.status(200).body(new JSONObject());
 	}
 }

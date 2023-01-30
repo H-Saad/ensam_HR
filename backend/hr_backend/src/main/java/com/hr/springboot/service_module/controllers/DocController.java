@@ -20,10 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.net.HttpHeaders;
 import com.hr.springboot.jwt.util.JwtUtil;
+import com.hr.springboot.notification_module.services.NotifDict;
+import com.hr.springboot.notification_module.services.NotifService;
 import com.hr.springboot.service_module.models.Document;
 import com.hr.springboot.service_module.repositories.DocRepo;
 import com.hr.springboot.service_module.services.DocService;
 import com.hr.springboot.userData_module.models.User;
+import com.hr.springboot.userData_module.repositories.UserRepo;
+import com.hr.springboot.validation_module.models.Request;
 import com.hr.springboot.validation_module.services.ValidationService;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -42,6 +46,15 @@ public class DocController {
 	
 	@Autowired
 	private ValidationService vs;
+	
+	@Autowired
+	private NotifService ns;
+	
+	@Autowired
+	private UserRepo ur;
+	
+	@Autowired
+	private NotifDict nd;
 
 	@PreAuthorize("hasRole('User')" + "|| hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
 	@GetMapping("getAllowed")
@@ -74,7 +87,9 @@ public class DocController {
 		if(!d.isNeeds_form()) {
 			ds.generate_doc(u, d, ds.getDbMappings(u, d));
 			if(d.isRequires_approval()) {
-				vs.createRequest(u, d);
+				Request r = vs.createRequest(u, d);
+				//notify user that his request has been saved
+				ns.makeNotif(u, u, r, nd.reqSaved(d));
 			}
 		}
 		else {
@@ -88,7 +103,11 @@ public class DocController {
 			mappings.putAll(ds.getDbMappings(u, d));
 			ds.generate_doc(u ,d, mappings);
 			if(d.isRequires_approval()) {
-				vs.createRequest(u, d);
+				Request r = vs.createRequest(u, d);
+				//notify user that his request has been created
+				ns.makeNotif(u, u , r, nd.reqCreated(d));
+				//notify the next layer that a request is waiting for him
+				ns.makeNotif(u, ur.findByRole("layer3").get(), r, nd.pendingReq(r));
 			}
 		}
 	}
