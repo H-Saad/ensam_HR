@@ -24,14 +24,15 @@ public class Completed_request implements Request{
 	private int l3_id;
 	private int l2_id;
 	private int l1_id;
+	private String final_file;
 	
 	public Completed_request() {
-		
+		this.final_file = "";
 	}
-
+	
 	public Completed_request(int id, int user_id, int document_id, LocalDateTime datetime, boolean approved_by_l3,
 			boolean approved_by_l2, boolean approved_by_l1, LocalDateTime l3_datetime, LocalDateTime l2_datetime,
-			LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id) {
+			LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id, String final_file) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -46,8 +47,9 @@ public class Completed_request implements Request{
 		this.l3_id = l3_id;
 		this.l2_id = l2_id;
 		this.l1_id = l1_id;
+		this.final_file = final_file;
 	}
-	
+
 	public Completed_request(Pending_request p) {
 		this.user_id = p.getUser_id();
 		this.document_id = p.getDocument_id();
@@ -61,6 +63,16 @@ public class Completed_request implements Request{
 		this.l3_id = p.getL3_id();
 		this.l2_id = p.getL2_id();
 		this.l1_id = p.getL1_id();
+		if(!p.getL1_file().equals("")) this.final_file = p.getL1_file();
+		else {
+			if(!p.getL2_file().equals("")) this.final_file = p.getL2_file();
+			else {
+				if(!p.getL3_file().equals("")) this.final_file = p.getL3_file();
+				else {
+					this.final_file = p.getUser_file();
+				}
+			}
+		}
 	}
 
 	public int getId() {
@@ -165,6 +177,14 @@ public class Completed_request implements Request{
 
 	public void setL1_id(int l1_id) {
 		this.l1_id = l1_id;
+	}
+
+	public String getFinal_file() {
+		return final_file;
+	}
+
+	public void setFinal_file(String final_file) {
+		this.final_file = final_file;
 	}
 
 }

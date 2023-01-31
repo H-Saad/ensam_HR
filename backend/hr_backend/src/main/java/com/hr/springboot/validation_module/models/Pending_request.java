@@ -24,16 +24,25 @@ public class Pending_request implements Request{
 	private int l3_id;
 	private int l2_id;
 	private int l1_id;
+	private String user_file;
+	private String l3_file;
+	private String l2_file;
+	private String l1_file;
 
 	public Pending_request() {
 		this.approved_by_l3 = false;
 		this.approved_by_l2 = false;
 		this.approved_by_l1 = false;
+		this.user_file = "";
+		this.l3_file = "";
+		this.l2_file = "";
+		this.l1_file = "";
 	}
 
 	public Pending_request(int id, int user_id, int document_id, LocalDateTime datetime, boolean approved_by_l3,
 			boolean approved_by_l2, boolean approved_by_l1, LocalDateTime l3_datetime, LocalDateTime l2_datetime,
-			LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id) {
+			LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id, String user_file, String l3_file,
+			String l2_file, String l1_file) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -48,6 +57,10 @@ public class Pending_request implements Request{
 		this.l3_id = l3_id;
 		this.l2_id = l2_id;
 		this.l1_id = l1_id;
+		this.user_file = user_file;
+		this.l3_file = l3_file;
+		this.l2_file = l2_file;
+		this.l1_file = l1_file;
 	}
 
 	public int getId() {
@@ -154,4 +167,35 @@ public class Pending_request implements Request{
 		this.l1_id = l1_id;
 	}
 
+	public String getUser_file() {
+		return user_file;
+	}
+
+	public void setUser_file(String user_file) {
+		this.user_file = user_file;
+	}
+
+	public String getL3_file() {
+		return l3_file;
+	}
+
+	public void setL3_file(String l3_file) {
+		this.l3_file = l3_file;
+	}
+
+	public String getL2_file() {
+		return l2_file;
+	}
+
+	public void setL2_file(String l2_file) {
+		this.l2_file = l2_file;
+	}
+
+	public String getL1_file() {
+		return l1_file;
+	}
+
+	public void setL1_file(String l1_file) {
+		this.l1_file = l1_file;
+	}
 }

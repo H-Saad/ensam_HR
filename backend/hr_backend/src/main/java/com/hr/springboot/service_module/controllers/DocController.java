@@ -27,6 +27,7 @@ import com.hr.springboot.service_module.repositories.DocRepo;
 import com.hr.springboot.service_module.services.DocService;
 import com.hr.springboot.userData_module.models.User;
 import com.hr.springboot.userData_module.repositories.UserRepo;
+import com.hr.springboot.validation_module.models.Pending_request;
 import com.hr.springboot.validation_module.models.Request;
 import com.hr.springboot.validation_module.services.ValidationService;
 import com.opencsv.exceptions.CsvValidationException;
@@ -81,14 +82,23 @@ public class DocController {
 	
 	@PreAuthorize("hasRole('User')" + "|| hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
 	@PostMapping("fill")
-	public void fill(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,Object> req) throws CsvValidationException, IOException, Exception {
+	public ResponseEntity<HashMap<String,String>> fill(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,Object> req) throws CsvValidationException, IOException, Exception {
 		User u = util.getUserfromToken(auth);
+		HashMap<String,String> ret = new HashMap<String,String>();
 		Document d = dr.findById(Integer.parseInt((String)req.get("id"))).get();
+		String filename = "";
 		if(!d.isNeeds_form()) {
-			ds.generate_doc(u, d, ds.getDbMappings(u, d));
+			filename = ds.generate_doc(u, d, ds.getDbMappings(u, d));
+			Request r = vs.createRequest(u, d, filename);
+			System.out.println(d.isRequires_approval());
 			if(d.isRequires_approval()) {
-				Request r = vs.createRequest(u, d);
-				//notify user that his request has been saved
+				//notify user that his request has been created
+				ns.makeNotif(u, u, r, nd.reqCreated(d));
+				//notify the next layer that a request is waiting for him
+				ns.makeNotif(u, ur.findByRole("layer3").get(), r, nd.pendingReq(r));
+			}else {
+				vs.completeRequest((Pending_request) r);
+				//notify user that document has been saved
 				ns.makeNotif(u, u, r, nd.reqSaved(d));
 			}
 		}
@@ -101,15 +111,22 @@ public class DocController {
 			}
 			mappings.putAll(temp);
 			mappings.putAll(ds.getDbMappings(u, d));
-			ds.generate_doc(u ,d, mappings);
+			filename = ds.generate_doc(u ,d, mappings);
+			Request r = vs.createRequest(u, d, filename);
 			if(d.isRequires_approval()) {
-				Request r = vs.createRequest(u, d);
 				//notify user that his request has been created
 				ns.makeNotif(u, u , r, nd.reqCreated(d));
 				//notify the next layer that a request is waiting for him
 				ns.makeNotif(u, ur.findByRole("layer3").get(), r, nd.pendingReq(r));
 			}
+			else {
+				vs.completeRequest((Pending_request) r);
+				//notify user that document has been saved
+				ns.makeNotif(u, u, r, nd.reqSaved(d));
+			}
 		}
+		ret.put("filename", filename);
+		return ResponseEntity.status(200).body(ret);
 	}
 	
 }

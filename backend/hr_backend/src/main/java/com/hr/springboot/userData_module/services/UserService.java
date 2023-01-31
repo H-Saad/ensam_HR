@@ -2,6 +2,7 @@ package com.hr.springboot.userData_module.services;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,4 +147,24 @@ public class UserService {
 	 public String getEncodedPassword(String password) {
 	        return passwordEncoder.encode(password);
 	    }
+	 
+	 public List<User> getAll(){
+		 List<User> l = ur.findAll();
+		 User n = ur.findByRole("superuser").get();
+		 l.remove(n);
+		 for(User u : l) {
+			 u.setPassword("");
+		 }
+		 return l;
+	 }
+	 
+	 //tobeimplemented
+	 public void importUsersCSV() {
+		 
+	 }
+	 
+	 //tobeimplemented
+	 public void exportUserCSV() {
+		 
+	 }
 }

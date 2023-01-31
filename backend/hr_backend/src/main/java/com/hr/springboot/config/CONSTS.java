@@ -8,4 +8,5 @@ public interface CONSTS {
 	String SU_ROLE = "superuser";
 	String TEMPLATES_DIR = "/templates/";
 	String DOC_DIR = "/generated_docs/";
+	String UPLOAD_DIR = "/uploads/";
 }

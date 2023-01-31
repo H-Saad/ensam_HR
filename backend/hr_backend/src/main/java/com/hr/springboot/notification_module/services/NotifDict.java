@@ -1,6 +1,7 @@
 package com.hr.springboot.notification_module.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.hr.springboot.service_module.models.Document;
 import com.hr.springboot.service_module.repositories.DocRepo;
@@ -8,6 +9,7 @@ import com.hr.springboot.userData_module.models.User;
 import com.hr.springboot.userData_module.repositories.UserRepo;
 import com.hr.springboot.validation_module.models.Request;
 
+@Service
 public class NotifDict {
 	
 	@Autowired

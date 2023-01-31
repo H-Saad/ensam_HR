@@ -27,15 +27,19 @@ public class Refused_request implements Request{
 	private LocalDateTime refusal_datetime;
 	private String refusal_cause;
 	private int refused_by;
+	private String user_file;
+	private String l3_file;
+	private String l2_file;
+	private String l1_file;
 	
 	public Refused_request() {
 		
 	}
-	
+
 	public Refused_request(int id, int user_id, int document_id, LocalDateTime datetime, boolean approved_by_l3,
 			boolean approved_by_l2, boolean approved_by_l1, LocalDateTime l3_datetime, LocalDateTime l2_datetime,
 			LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id, LocalDateTime refusal_datetime,
-			String refusal_cause, int refused_by) {
+			String refusal_cause, int refused_by, String user_file, String l3_file, String l2_file, String l1_file) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -53,9 +57,11 @@ public class Refused_request implements Request{
 		this.refusal_datetime = refusal_datetime;
 		this.refusal_cause = refusal_cause;
 		this.refused_by = refused_by;
+		this.user_file = user_file;
+		this.l3_file = l3_file;
+		this.l2_file = l2_file;
+		this.l1_file = l1_file;
 	}
-
-
 
 	public Refused_request(Pending_request p) {
 		this.user_id = p.getUser_id();
@@ -70,6 +76,10 @@ public class Refused_request implements Request{
 		this.l3_id = p.getL3_id();
 		this.l2_id = p.getL2_id();
 		this.l1_id = p.getL1_id();
+		this.l1_file = p.getL1_file();
+		this.l2_file = p.getL2_file();
+		this.l3_file = p.getL3_file();
+		this.user_file = p.getUser_file();
 	}
 
 	public int getId() {
@@ -199,7 +209,37 @@ public class Refused_request implements Request{
 	public void setRefused_by(int refused_by) {
 		this.refused_by = refused_by;
 	}
-	
-	
+
+	public String getUser_file() {
+		return user_file;
+	}
+
+	public void setUser_file(String user_file) {
+		this.user_file = user_file;
+	}
+
+	public String getL3_file() {
+		return l3_file;
+	}
+
+	public void setL3_file(String l3_file) {
+		this.l3_file = l3_file;
+	}
+
+	public String getL2_file() {
+		return l2_file;
+	}
+
+	public void setL2_file(String l2_file) {
+		this.l2_file = l2_file;
+	}
+
+	public String getL1_file() {
+		return l1_file;
+	}
+
+	public void setL1_file(String l1_file) {
+		this.l1_file = l1_file;
+	}
 	
 }

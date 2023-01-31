@@ -13,12 +13,12 @@ public class Notification {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private int from;
-	private int to;
+	private int from_id;
+	private int to_id;
 	private int request_id;
 	private String description;
 	private LocalDateTime timestamp;
-	private boolean read;
+	private boolean read_state;
 	
 	public Notification() {
 		
@@ -28,12 +28,12 @@ public class Notification {
 			boolean read) {
 		super();
 		this.id = id;
-		this.from = from;
-		this.to = to;
+		this.from_id = from;
+		this.to_id = to;
 		this.request_id = request_id;
 		this.description = description;
 		this.timestamp = timestamp;
-		this.read = read;
+		this.read_state = read;
 	}
 
 	public int getId() {
@@ -45,19 +45,19 @@ public class Notification {
 	}
 
 	public int getFrom() {
-		return from;
+		return from_id;
 	}
 
 	public void setFrom(int from) {
-		this.from = from;
+		this.from_id = from;
 	}
 
 	public int getTo() {
-		return to;
+		return to_id;
 	}
 
 	public void setTo(int to) {
-		this.to = to;
+		this.to_id = to;
 	}
 
 	public int getRequest_id() {
@@ -85,10 +85,10 @@ public class Notification {
 	}
 
 	public boolean isRead() {
-		return read;
+		return read_state;
 	}
 
 	public void setRead(boolean read) {
-		this.read = read;
+		this.read_state = read;
 	}
 }

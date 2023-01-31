@@ -1,4 +1,4 @@
-package com.hr.springboot.mailing_module.controllers;
+package com.hr.springboot.notification_module.controllers;
 
 import java.util.HashMap;
 import java.util.List;

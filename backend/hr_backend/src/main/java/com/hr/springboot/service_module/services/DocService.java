@@ -260,14 +260,15 @@ public class DocService {
 
 	  }
 	  
-	  public void generate_doc(User u,Document d, HashMap<String, String> mappings) throws Exception {
+	  public String generate_doc(User u,Document d, HashMap<String, String> mappings) throws Exception {
 		  org.docx4j.wml.ObjectFactory foo = Context.getWmlObjectFactory();
 
 			// Input docx has variables in it: ${colour}, ${icecream}
 			String inputfilepath = System.getProperty("user.dir") + CONSTS.TEMPLATES_DIR + d.getTitle() + "/" + d.getTitle() + ".docx";
 
 			boolean save = true;
-			String outputfilepath = System.getProperty("user.dir") + CONSTS.DOC_DIR + generateUniqueFileName(u, d) +".docx";
+			String filename = generateUniqueFileName(u, d)+".docx";
+			String outputfilepath = System.getProperty("user.dir") + CONSTS.DOC_DIR + filename;
 
 			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
 					.load(new java.io.File(inputfilepath));
@@ -284,6 +285,7 @@ public class DocService {
 			
 			SaveToZipFile saver = new SaveToZipFile(wordMLPackage);
 			saver.save(outputfilepath);
+			return filename;
 	  }
 	  
 	  public ArrayList<HashMap<String,String>> getFillableVars(Document d) throws CsvValidationException, IOException{
@@ -333,8 +335,14 @@ public class DocService {
 		  HashSet<Role> r = new HashSet<Role>();
 		  r.add(rs.getRole(CONSTS.USER_ROLE));
 		  
+		  HashSet<Role> r2 = new HashSet<Role>();
+		  r2.add(rs.getRole(CONSTS.USER_ROLE));
+		  r2.add(rs.getRole(CONSTS.L1_ROLE));
+		  r2.add(rs.getRole(CONSTS.L2_ROLE));
+		  r2.add(rs.getRole(CONSTS.L3_ROLE));
+		  
 		  a.setTitle("Attestation de Travail");
-		  a.setAllowed_roles(r);
+		  a.setAllowed_roles(r2);
 		  a.setNeeds_form(false);
 		  a.setRequires_approval(true);
 		  dr.save(a);

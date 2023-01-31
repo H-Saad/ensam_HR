@@ -109,11 +109,19 @@ public class ValidationController {
 	}
 	
 	@PreAuthorize("hasRole('layer3')")
-	@GetMapping("layer3Accept/{id}")
-	public ResponseEntity<JSONObject> l3Accept(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @PathVariable int id){
+	@PostMapping("layer3Accept")
+	/*
+	 * For every layer accept api
+	 * post request body:
+	 * json {
+	 * 			"id" : "id",
+	 * 			"filename" : "filename"
+	 * 		}
+	 */
+	public ResponseEntity<JSONObject> l3Accept(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,String> req){
 		User u = util.getUserfromToken(auth);
-		Pending_request p = pr.findById(id).get();
-		vs.validatel3(p, u);
+		Pending_request p = pr.findById(Integer.parseInt(req.get("id"))).get();
+		vs.validatel3(p, u, req.get("filename"));
 		//notifier l'utilisateur qu'il a approuve une requete
 		ns.makeNotif(u, u, p, nd.approve(p));
 		//notifier next layer qu'une requete l'attends
@@ -121,6 +129,14 @@ public class ValidationController {
 		return ResponseEntity.status(200).body(new JSONObject());
 	}
 	
+	/*
+	 * For every layer refuse api
+	 * post request body:
+	 * json {
+	 * 			"id" : "id",
+	 * 			"refusal_msg" : "refusal_msg"
+	 * 		}
+	 */
 	@PreAuthorize("hasRole('layer3')")
 	@PostMapping("layer3Refuse")
 	public ResponseEntity<JSONObject> l3Refuse(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,String> req){
@@ -134,11 +150,11 @@ public class ValidationController {
 	
 	
 	@PreAuthorize("hasRole('layer2')")
-	@GetMapping("layer2Accept/{id}")
-	public ResponseEntity<JSONObject> l2Accept(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @PathVariable int id){
+	@PostMapping("layer2Accept")
+	public ResponseEntity<JSONObject> l2Accept(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth,  @RequestBody HashMap<String,String> req){
 		User u = util.getUserfromToken(auth);
-		Pending_request p = pr.findById(id).get();
-		vs.validatel2(p, u);
+		Pending_request p = pr.findById(Integer.parseInt(req.get("id"))).get();
+		vs.validatel2(p, u, req.get("filename"));
 		ns.makeNotif(u, u, p, nd.approve(p));
 		//notifier next layer qu'une requete l'attends
 		ns.makeNotif(u, ur.findByRole("layer1").get(), p, nd.pendingReq(p));
@@ -157,11 +173,11 @@ public class ValidationController {
 	
 	
 	@PreAuthorize("hasRole('layer1')")
-	@GetMapping("layer1Accept/{id}")
-	public ResponseEntity<JSONObject> l1Accept(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @PathVariable int id){
+	@PostMapping("layer1Accept")
+	public ResponseEntity<JSONObject> l1Accept(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,String> req){
 		User u = util.getUserfromToken(auth);
-		Pending_request p = pr.findById(id).get();
-		vs.validatel1(p, u);
+		Pending_request p = pr.findById(Integer.parseInt(req.get("id"))).get();
+		vs.validatel1(p, u, req.get("filename"));
 		ns.makeNotif(u, u, p, nd.approve(p));
 		p = pr.findById(p.getId()).get();
 		if(p.isApproved_by_l1() && p.isApproved_by_l2() && p.isApproved_by_l3()) {

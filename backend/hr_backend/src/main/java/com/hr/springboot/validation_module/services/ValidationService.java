@@ -41,33 +41,37 @@ public class ValidationService {
 	UserRepo ur;
 	
 	
-	public Request createRequest(User u, Document d) {
+	public Request createRequest(User u, Document d, String filename) {
 		Pending_request p = new Pending_request();
 		p.setUser_id(u.getId());
 		p.setDocument_id(d.getId());
 		p.setDatetime(LocalDateTime.now());
+		p.setUser_file(filename);
 		pr.save(p);
 		return p;
 	}
 	
-	public void validatel1(Pending_request p, User u) {
+	public void validatel1(Pending_request p, User u, String filename) {
 		p.setApproved_by_l1(true);
 		p.setL1_id(u.getId());
 		p.setL1_datetime(LocalDateTime.now());
+		p.setL1_file(filename);
 		pr.save(p);
 	}
 	
-	public void validatel2(Pending_request p, User u) {
+	public void validatel2(Pending_request p, User u, String filename) {
 		p.setApproved_by_l2(true);
 		p.setL2_id(u.getId());
 		p.setL2_datetime(LocalDateTime.now());
+		p.setL2_file(filename);
 		pr.save(p);
 	}
 	
-	public void validatel3(Pending_request p, User u) {
+	public void validatel3(Pending_request p, User u, String filename) {
 		p.setApproved_by_l3(true);
 		p.setL3_id(u.getId());
 		p.setL3_datetime(LocalDateTime.now());
+		p.setL3_file(filename);
 		pr.save(p);
 		//notifier l'utilisateur que sa requete est approuve
 		ns.makeNotif(u, ur.findById(p.getUser_id()).get(), p, nd.approvedBy(u, p));
