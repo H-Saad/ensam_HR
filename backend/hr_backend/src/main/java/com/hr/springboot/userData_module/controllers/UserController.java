@@ -3,6 +3,7 @@ package com.hr.springboot.userData_module.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,14 @@ public class UserController {
 	@GetMapping("getUser")
 	public User getuser(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
 		User u = util.getUserfromToken(auth);
+		u.setPassword("");
+		return u;
+	}
+	
+	@PreAuthorize("hasRole('User')" + "|| hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
+	@GetMapping("getUserbyID/{id}")
+	public User getuserbyid(@PathVariable int id) {
+		User u = ur.findById(id).get();
 		u.setPassword("");
 		return u;
 	}

@@ -129,4 +129,10 @@ public class DocController {
 		return ResponseEntity.status(200).body(ret);
 	}
 	
+	@PreAuthorize("hasRole('User')" + "|| hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
+	@GetMapping("getByID/{id}")
+	public Document getbyid(@PathVariable int id) {
+		return dr.findById(id).get();
+	}
+	
 }
