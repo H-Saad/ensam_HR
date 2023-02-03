@@ -1,0 +1,22 @@
+db_nom,string,Nom ,FALSE
+db_prenom,string,Prénom,FALSE
+db_ppr,string,PPR,FALSE
+db_cin,string,CIN,FALSE
+db_numTel,string,numtel,FALSE
+db_email,string,email,FALSE
+db_codeG,string,Code grade,FALSE
+db_typePers,string,Type de personnel,FALSE
+db_dateR,date,Date de recrutement,FALSE
+db_dateAffM,date,Date d'affectation mesrfc,FALSE
+db_dateAffE,date,Date d'affectation enseignement,FALSE
+db_codeD,string,Code département,FALSE
+db_dept,string,Département,FALSE
+db_nDip,string,Nombre de diplômes,FALSE
+db_dip,string,Diplôme,FALSE
+db_spe,string,Spécialité,FALSE
+db_univ,string,Université établissement diplômante,FALSE
+db_fctE,string,Fonction exercée,FALSE
+db_servA,string,Service d'affectation,FALSE
+db_grade,string,Grade,FALSE
+db_echelon,string,Échelon,FALSE
+db_dateEch,date,Date effet échelon,FALSE

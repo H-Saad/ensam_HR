@@ -79,6 +79,11 @@ public class UserService {
 		u1.setLieu_naissance("Casablanca");
 		u1.setFonction_exerce("Professeur d'enseignement superieur");
 		u1.setGrade("No clue");
+		u1.setDate_affectation_enseignement(LocalDate.now());
+		u1.setDate_affectation_MESRSFC(LocalDate.now());
+		u1.setDate_effet_echelon(LocalDate.now());
+		u1.setDate_effet_grade(LocalDate.now());
+		u1.setDate_recrutement(LocalDate.now());
 
 		Set<Role> temp1 = new HashSet<Role>();
 		temp1.add(userRole);

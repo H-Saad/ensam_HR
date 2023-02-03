@@ -1,0 +1,17 @@
+﻿db_arNom;string;الاسـم العـائلـي;false
+db_ppr;string;رقـم التأجيـر ;false
+db_arPrenom;string;الاسم الشخصي ;false
+db_cin;string;رقم ب.ت.و ;false
+db_dateN;date;تـاريخ الازديـاد ;false
+db_lieuN;string;مكان الازدياد ;false
+etat_civ;string;الحالـة العائليـــة ;true
+nb_enf;string;عـدد الأطفـال ;true
+db_grade;string;الدرجة;false
+db_echelon;string;الرتبـة;false
+db_dateEch;string;أقدمية;false
+db_dateR;date;تاريخ ولوج الوظيفة العمومية;false
+db_fctE;string;الوظيفة المزاولة حاليا ;false
+note;string;النقطة الممنوحة;true
+rmq;text;ملاحظات;true
+X;string;الميــــــــزة الممنوحـــــــــة ;true
+current_year;current year;false

@@ -1,10 +1,13 @@
 package com.hr.springboot.service_module.services;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +25,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.poi.xwpf.converter.pdf.PdfConverter;
+import org.apache.poi.xwpf.converter.pdf.PdfOptions;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.docx4j.Docx4J;
+import org.docx4j.XmlUtils;
 import org.docx4j.jaxb.Context;
 import org.docx4j.model.datastorage.migration.VariablePrepare;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -261,7 +269,7 @@ public class DocService {
 	  }
 	  
 	  public String generate_doc(User u,Document d, HashMap<String, String> mappings) throws Exception {
-		  org.docx4j.wml.ObjectFactory foo = Context.getWmlObjectFactory();
+		  	org.docx4j.wml.ObjectFactory foo = Context.getWmlObjectFactory();
 
 			// Input docx has variables in it: ${colour}, ${icecream}
 			String inputfilepath = System.getProperty("user.dir") + CONSTS.TEMPLATES_DIR + d.getTitle() + "/" + d.getTitle() + ".docx";
@@ -276,15 +284,24 @@ public class DocService {
 			
 			VariablePrepare.prepare(wordMLPackage);
 			
-			long start = System.currentTimeMillis();
+			//documentPart.variableReplace(mappings);
 			
-			documentPart.variableReplace(mappings);
-			
-			long end = System.currentTimeMillis();
-			long total = end - start;
+			// unmarshallFromTemplate requires string input
+			String xml = XmlUtils.marshaltoString(documentPart.getJaxbElement(), true);
+			// Do it...
+			Object obj = XmlUtils.unmarshallFromTemplate(xml, mappings);
+			// Inject result into docx
+			documentPart.setJaxbElement((org.docx4j.wml.Document) obj);
+						
 			
 			SaveToZipFile saver = new SaveToZipFile(wordMLPackage);
 			saver.save(outputfilepath);
+			/*FileOutputStream os = new FileOutputStream(outputfilepath);
+            Docx4J.toPDF(wordMLPackage,os);
+            os.flush();
+            os.close();*/
+          
+			System.out.println(mappings);
 			return filename;
 	  }
 	  
@@ -319,6 +336,7 @@ public class DocService {
 	  
 	  public HashMap<String,String> getDbMappings(User u, Document d) throws CsvValidationException, IOException{
 		  ArrayList<HashMap<String,String>> inp = getDbVars(d);
+		  System.out.println(inp);
 		  HashMap<String,String> ret = new HashMap<String,String>();
 		  for(HashMap<String,String> a : inp) {
 			  ret.put(a.get("varname"), input_to_var(u, a.get("varname")));
@@ -328,9 +346,14 @@ public class DocService {
 	  }
 	  
 	  public void initTestDocs() {
-		  Document a,b;
+		  Document a,b,c,d,e,f,g;
 		  a = new Document();
 		  b = new Document();
+		  c = new Document();
+		  d = new Document();
+		  e = new Document();
+		  f = new Document();
+		  g = new Document();
 		  
 		  HashSet<Role> r = new HashSet<Role>();
 		  r.add(rs.getRole(CONSTS.USER_ROLE));
@@ -340,6 +363,9 @@ public class DocService {
 		  r2.add(rs.getRole(CONSTS.L1_ROLE));
 		  r2.add(rs.getRole(CONSTS.L2_ROLE));
 		  r2.add(rs.getRole(CONSTS.L3_ROLE));
+		  
+		  HashSet<Role> rlayer3only = new HashSet<Role>();
+		  rlayer3only.add(rs.getRole(CONSTS.L3_ROLE));
 		  
 		  a.setTitle("Attestation de Travail");
 		  a.setAllowed_roles(r2);
@@ -352,6 +378,36 @@ public class DocService {
 		  b.setNeeds_form(true);
 		  b.setRequires_approval(true);
 		  dr.save(b);
+		  
+		  c.setTitle("Autorisation de Quitter le Territoire National");
+		  c.setAllowed_roles(r);
+		  c.setNeeds_form(true);
+		  c.setRequires_approval(true);
+		  dr.save(c);
+		  
+		  d.setTitle("Decision de congé");
+		  d.setAllowed_roles(r);
+		  d.setNeeds_form(true);
+		  d.setRequires_approval(true);
+		  dr.save(d);
+		  
+		  e.setTitle("Situation Administrative");
+		  e.setAllowed_roles(r);
+		  e.setNeeds_form(false);
+		  e.setRequires_approval(false);
+		  dr.save(e);
+		  
+		  f.setTitle("Autorisation d'absence hors periode de vacances");
+		  f.setAllowed_roles(r);
+		  f.setNeeds_form(true);
+		  f.setRequires_approval(true);
+		  dr.save(f);
+		  
+		  g.setTitle("استفسار");
+		  g.setAllowed_roles(rlayer3only);
+		  g.setNeeds_form(true);
+		  g.setRequires_approval(false);
+		  dr.save(g);
 	  }
 	  
 	  public String generateUniqueFileName(User u, Document d) {

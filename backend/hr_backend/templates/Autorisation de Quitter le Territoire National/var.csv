@@ -1,0 +1,10 @@
+db_pronom,string,Mr/Mme,false
+db_fullname,string,Nom et Prenom,false
+db_ppr,string,Ppr,false
+db_cin,string,Cin,false
+db_dateN,date,Date de naissance,false
+db_lieuN,string,Lieu de naissance,false
+db_fctE,string,Fonction exercée,false
+date_dep,date,Date de depart,true
+date_ret,date,Date d'arrivée,true
+db_currDate,date,Current date,false

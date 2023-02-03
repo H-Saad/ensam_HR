@@ -2,6 +2,7 @@ package com.hr.springboot.userData_module.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,6 +14,7 @@ import com.hr.springboot.jwt.util.JwtUtil;
 import com.hr.springboot.userData_module.models.User;
 import com.hr.springboot.userData_module.repositories.UserRepo;
 
+@CrossOrigin
 @RestController
 @RequestMapping("user")
 public class UserController {

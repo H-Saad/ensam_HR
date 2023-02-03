@@ -1,0 +1,10 @@
+db_pronom,string,Mr/Mme,FALSE
+db_fullname,string,Nom et Prenom,FALSE
+db_ppr,string,Ppr,FALSE
+db_cin,string,Cin,FALSE
+date_dem,date,Date de demande,TRUE
+duree_sej,string,Durée de congé,TRUE
+fin_vac,date,Fin de congé,TRUE
+deb_vac,date,Début de congé,TRUE
+db_currdate,date,Current date,FALSE
+db_grade,string,Grade,FALSE

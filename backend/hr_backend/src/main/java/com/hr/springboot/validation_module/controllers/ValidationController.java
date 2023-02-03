@@ -1,12 +1,16 @@
 package com.hr.springboot.validation_module.controllers;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.mapping.Map;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.net.HttpHeaders;
 import com.hr.springboot.jwt.util.JwtUtil;
 import com.hr.springboot.notification_module.services.NotifDict;
 import com.hr.springboot.notification_module.services.NotifService;
+import com.hr.springboot.service_module.repositories.DocRepo;
 import com.hr.springboot.userData_module.models.User;
 import com.hr.springboot.userData_module.repositories.UserRepo;
 import com.hr.springboot.validation_module.models.Completed_request;
@@ -29,6 +35,7 @@ import com.hr.springboot.validation_module.repositories.PendingRepo;
 import com.hr.springboot.validation_module.repositories.RefusedRepo;
 import com.hr.springboot.validation_module.services.ValidationService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("validation")
 public class ValidationController {
@@ -57,55 +64,132 @@ public class ValidationController {
 	@Autowired
 	private UserRepo ur;
 	
+	@Autowired
+	private DocRepo dr;
+	
 	@PreAuthorize("hasRole('User')")
 	@GetMapping("UserRefused")
-	List<Refused_request> getuserrefused(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
+	public List<HashMap<String,Object>> getuserrefused(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
 		User u = util.getUserfromToken(auth);
-		return vs.getUserRefused(u);
+		List<Refused_request> lr = vs.getUserRefused(u);
+		List<HashMap<String,Object>> ret = new ArrayList<HashMap<String,Object>>();
+		for(Refused_request rr : lr) {
+			HashMap<String,Object> temp = new HashMap<String,Object>();
+			temp.put("refused_request", rr);
+			temp.put("source_user", ur.findById(rr.getUser_id()).get());
+			temp.put("document", dr.findById(rr.getDocument_id()).get());
+			temp.put("refused_by_user", ur.findById(rr.getUser_id()).get());
+			ret.add(temp);
+		}
+		return ret;
 	}
 	
 	@PreAuthorize("hasRole('User')")
 	@GetMapping("UserCompleted")
-	List<Completed_request> getusercompleted(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
+	public List<HashMap<String,Object>> getusercompleted(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
 		User u = util.getUserfromToken(auth);
-		return vs.getUserCompleted(u);
+		List<Completed_request> lc = vs.getUserCompleted(u);
+		List<HashMap<String,Object>> ret = new ArrayList<HashMap<String,Object>>();
+		for(Completed_request cr: lc) {
+			HashMap<String,Object> temp = new HashMap<String,Object>();
+			temp.put("completed_request", cr);
+			temp.put("source_user", ur.findById(cr.getUser_id()).get());
+			temp.put("document", dr.findById(cr.getDocument_id()).get());
+			ret.add(temp);
+		}
+		return ret;
 	}
 	
 	@PreAuthorize("hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
 	@GetMapping("layerRefused")
-	List<Refused_request> getlayerRefused(){
-		return rr.findAll();
+	public List<HashMap<String,Object>> getlayerRefused(){
+		List<Refused_request> lr = rr.findAll();
+		List<HashMap<String,Object>> ret = new ArrayList<HashMap<String,Object>>();
+		for(Refused_request rr : lr) {
+			HashMap<String,Object> temp = new HashMap<String,Object>();
+			temp.put("refused_request", rr);
+			temp.put("source_user", ur.findById(rr.getUser_id()).get());
+			temp.put("document", dr.findById(rr.getDocument_id()).get());
+			temp.put("refused_by_user", ur.findById(rr.getUser_id()).get());
+			ret.add(temp);
+		}
+		return ret;
 	}
 	
 	@PreAuthorize("hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
 	@GetMapping("layerCompleted")
-	List<Completed_request> getlayercompleted(){
-		return cr.findAll();
+	public List<HashMap<String,Object>> getlayercompleted(){
+		List<Completed_request> lc = cr.findAll();
+		List<HashMap<String,Object>> ret = new ArrayList<HashMap<String,Object>>();
+		for(Completed_request cr: lc) {
+			HashMap<String,Object> temp = new HashMap<String,Object>();
+			temp.put("completed_request", cr);
+			temp.put("source_user", ur.findById(cr.getUser_id()).get());
+			temp.put("document", dr.findById(cr.getDocument_id()).get());
+			ret.add(temp);
+		}
+		return ret;
 	}
 
 	@PreAuthorize("hasRole('User')")
 	@GetMapping("UserPending")
-	public List<Pending_request> userpending(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
+	public List<HashMap<String,Object>> userpending(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
 		User u = util.getUserfromToken(auth);
-		return vs.getUserPending(u);
+		List<Pending_request> lp = vs.getUserPending(u);
+		List<HashMap<String,Object>> ret = new ArrayList<HashMap<String,Object>>();
+		for(Pending_request cr: lp) {
+			HashMap<String,Object> temp = new HashMap<String,Object>();
+			temp.put("pending_request", cr);
+			temp.put("source_user", ur.findById(cr.getUser_id()).get());
+			temp.put("document", dr.findById(cr.getDocument_id()).get());
+			ret.add(temp);
+		}
+		return ret;
 	}
 	
 	@PreAuthorize("hasRole('layer3')")
 	@GetMapping("layer3Pending")
-	public List<Pending_request> l3pending(){
-		return vs.getL3Pending();
+	public List<HashMap<String,Object>> l3pending(){
+		List<Pending_request> lp = vs.getL3Pending();
+		List<HashMap<String,Object>> ret = new ArrayList<HashMap<String,Object>>();
+		for(Pending_request cr: lp) {
+			HashMap<String,Object> temp = new HashMap<String,Object>();
+			temp.put("pending_request", cr);
+			temp.put("source_user", ur.findById(cr.getUser_id()).get());
+			temp.put("document", dr.findById(cr.getDocument_id()).get());
+			ret.add(temp);
+		}
+		return ret;
 	}
 	
 	@PreAuthorize("hasRole('layer2')")
 	@GetMapping("layer2Pending")
-	public List<Pending_request> l2pending(){
-		return vs.getL2Pending();
+	public List<HashMap<String,Object>> l2pending(){
+		List<Pending_request> lp = vs.getL2Pending();
+		List<HashMap<String,Object>> ret = new ArrayList<HashMap<String,Object>>();
+		for(Pending_request cr: lp) {
+			HashMap<String,Object> temp = new HashMap<String,Object>();
+			temp.put("pending_request", cr);
+			temp.put("source_user", ur.findById(cr.getUser_id()).get());
+			temp.put("document", dr.findById(cr.getDocument_id()).get());
+			ret.add(temp);
+		}
+		return ret;
 	}
 	
 	@PreAuthorize("hasRole('layer1')")
 	@GetMapping("layer1Pending")
-	public List<Pending_request> l1pending(){
-		return vs.getL1Pending();
+	public List<HashMap<String,Object>> l1pending(){
+		List<Pending_request> lp = vs.getL1Pending();
+		List<HashMap<String,Object>> ret = new ArrayList<HashMap<String,Object>>();
+		for(Pending_request cr: lp) {
+			HashMap<String,Object> temp = new HashMap<String,Object>();
+			temp.put("pending_request", cr);
+			temp.put("source_user", ur.findById(cr.getUser_id()).get());
+			temp.put("document", dr.findById(cr.getDocument_id()).get());
+			ret.add(temp);
+		}
+		return ret;	
 	}
 	
 	@PreAuthorize("hasRole('layer3')")

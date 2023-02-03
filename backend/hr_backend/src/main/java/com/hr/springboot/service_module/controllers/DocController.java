@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,7 @@ import com.hr.springboot.validation_module.models.Request;
 import com.hr.springboot.validation_module.services.ValidationService;
 import com.opencsv.exceptions.CsvValidationException;
 
+@CrossOrigin
 @RestController
 @RequestMapping("docs")
 public class DocController {
@@ -89,6 +91,7 @@ public class DocController {
 		String filename = "";
 		if(!d.isNeeds_form()) {
 			filename = ds.generate_doc(u, d, ds.getDbMappings(u, d));
+			System.out.println(ds.getDbMappings(u, d));
 			Request r = vs.createRequest(u, d, filename);
 			System.out.println(d.isRequires_approval());
 			if(d.isRequires_approval()) {
