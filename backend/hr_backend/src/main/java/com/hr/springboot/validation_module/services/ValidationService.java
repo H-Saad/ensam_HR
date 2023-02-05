@@ -80,6 +80,20 @@ public class ValidationService {
 	public void completeRequest(Pending_request p) {
 		Completed_request c = new Completed_request(p);
 		pr.delete(p);
+		if(p.getL1_datetime()!=null) {
+			c.setCompletion_date(p.getL1_datetime());
+		}else {
+			if(p.getL2_datetime()!=null) {
+				c.setCompletion_date(p.getL2_datetime());
+			}else {
+				if(p.getL3_datetime()!=null) {
+					c.setCompletion_date(p.getL3_datetime());
+				}
+				else {
+					c.setCompletion_date(p.getDatetime());
+				}
+			}
+		}
 		cr.save(c);
 		ns.makeNotif(ur.findById(p.getUser_id()).get(), ur.findById(p.getUser_id()).get(), c, nd.complete(c));
 	}

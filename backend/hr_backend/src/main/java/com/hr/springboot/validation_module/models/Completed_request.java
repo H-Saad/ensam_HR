@@ -25,14 +25,16 @@ public class Completed_request implements Request{
 	private int l2_id;
 	private int l1_id;
 	private String final_file;
+	private LocalDateTime completion_date;
 	
 	public Completed_request() {
 		this.final_file = "";
 	}
-	
+
 	public Completed_request(int id, int user_id, int document_id, LocalDateTime datetime, boolean approved_by_l3,
 			boolean approved_by_l2, boolean approved_by_l1, LocalDateTime l3_datetime, LocalDateTime l2_datetime,
-			LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id, String final_file) {
+			LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id, String final_file,
+			LocalDateTime completion_date) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -48,6 +50,7 @@ public class Completed_request implements Request{
 		this.l2_id = l2_id;
 		this.l1_id = l1_id;
 		this.final_file = final_file;
+		this.completion_date = completion_date;
 	}
 
 	public Completed_request(Pending_request p) {
@@ -191,6 +194,12 @@ public class Completed_request implements Request{
 	public String getType() {
 		return "completed";
 	}
-	
 
+	public LocalDateTime getCompletion_date() {
+		return completion_date;
+	}
+
+	public void setCompletion_date(LocalDateTime completion_date) {
+		this.completion_date = completion_date;
+	}
 }
