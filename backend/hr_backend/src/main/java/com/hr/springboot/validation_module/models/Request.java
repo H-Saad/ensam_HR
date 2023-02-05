@@ -55,4 +55,5 @@ public interface Request {
 
 	public void setL1_id(int l1_id);
 
+	public String getType();
 }

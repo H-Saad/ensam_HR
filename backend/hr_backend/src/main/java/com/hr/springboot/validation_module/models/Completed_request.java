@@ -187,4 +187,10 @@ public class Completed_request implements Request{
 		this.final_file = final_file;
 	}
 
+	@Override
+	public String getType() {
+		return "completed";
+	}
+	
+
 }

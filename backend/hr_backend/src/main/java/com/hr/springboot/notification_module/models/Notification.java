@@ -19,21 +19,23 @@ public class Notification {
 	private String description;
 	private LocalDateTime timestamp;
 	private boolean read_state;
+	private String request_type;
 	
 	public Notification() {
 		
 	}
 
-	public Notification(int id, int from, int to, int request_id, String description, LocalDateTime timestamp,
-			boolean read) {
+	public Notification(int id, int from_id, int to_id, int request_id, String description, LocalDateTime timestamp,
+			boolean read_state, String request_type) {
 		super();
 		this.id = id;
-		this.from_id = from;
-		this.to_id = to;
+		this.from_id = from_id;
+		this.to_id = to_id;
 		this.request_id = request_id;
 		this.description = description;
 		this.timestamp = timestamp;
-		this.read_state = read;
+		this.read_state = read_state;
+		this.request_type = request_type;
 	}
 
 	public int getId() {
@@ -91,4 +93,13 @@ public class Notification {
 	public void setRead(boolean read) {
 		this.read_state = read;
 	}
+
+	public String getRequest_type() {
+		return request_type;
+	}
+
+	public void setRequest_type(String request_type) {
+		this.request_type = request_type;
+	}
+	
 }

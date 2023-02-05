@@ -241,5 +241,10 @@ public class Refused_request implements Request{
 	public void setL1_file(String l1_file) {
 		this.l1_file = l1_file;
 	}
+
+	@Override
+	public String getType() {
+		return "refused";
+	}
 	
 }

@@ -23,6 +23,7 @@ public class NotifService {
 		n.setRequest_id(r.getId());
 		n.setDescription(desc);
 		n.setRead(false);
+		n.setRequest_type(r.getType());
 		
 		nr.save(n);
 	}

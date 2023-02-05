@@ -39,11 +39,11 @@ public class Test {
 	@Autowired
 	DocService dr;
 	
-	/*@PostConstruct
+	@PostConstruct
 	public void initTestcases() {
 		us.initRoleUser();
 		dr.initTestDocs();
-	}*/
+	}
 	
 	
 	@PreAuthorize("hasRole('User')")
