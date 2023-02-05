@@ -47,6 +47,7 @@ import com.hr.springboot.service_module.repositories.DocRepo;
 import com.hr.springboot.userData_module.models.Role;
 import com.hr.springboot.userData_module.models.Type_personnel;
 import com.hr.springboot.userData_module.models.User;
+import com.hr.springboot.userData_module.repositories.TypeRepo;
 import com.hr.springboot.userData_module.repositories.UserRepo;
 import com.hr.springboot.userData_module.services.RoleService;
 import com.opencsv.CSVReader;
@@ -63,6 +64,9 @@ public class DocService {
 	
 	@Autowired
 	RoleService rs;
+	
+	@Autowired
+	TypeRepo tr;
 	
 	public String input_to_var(User u, String input) {
 		
@@ -101,7 +105,7 @@ public class DocService {
 			Set<Type_personnel> t = u.getType_personnel();
 			String ret = "";
 			for(Type_personnel ty : t) {
-				ret = ret + " " +ty.getType();
+				ret = ret + " " +ty.getId();
 			}
 			return ret;
 		case "db_dater":
@@ -186,10 +190,19 @@ public class DocService {
 		}
 	}
 	
-	public List<Document> getDocList(Set<Role> s){
+	public List<Document> getDocList(User u){
 		String y = "";
+		String z = "";
+		Set<Role> s = u.getRole();
+		Set<Type_personnel> tp = u.getType_personnel();
 		for(Role r : s) {
 			y = r.getRoleName();
+		}
+		if(y.equals("User")) {
+			for(Type_personnel t:tp) {
+				z = t.getId();
+			}
+			return dr.findByRolePers(y, z);
 		}
 		return dr.findByRole(y);
 	}
@@ -355,6 +368,16 @@ public class DocService {
 		  f = new Document();
 		  g = new Document();
 		  
+		  HashSet<Type_personnel> t1 = new HashSet<Type_personnel>();
+		  HashSet<Type_personnel> t2 = new HashSet<Type_personnel>();
+		  HashSet<Type_personnel> t3 = new HashSet<Type_personnel>();
+		  
+		  
+		  t1.add(tr.findById("Enseignant").get());
+		  t2.add(tr.findById("Administratif").get());
+		  t3.add(tr.findById("Enseignant").get());
+		  t3.add(tr.findById("Administratif").get());
+		  
 		  HashSet<Role> r = new HashSet<Role>();
 		  r.add(rs.getRole(CONSTS.USER_ROLE));
 		  
@@ -371,42 +394,49 @@ public class DocService {
 		  a.setAllowed_roles(r2);
 		  a.setNeeds_form(false);
 		  a.setRequires_approval(true);
+		  a.setAllowed_personnel(t3);
 		  dr.save(a);
 		  
 		  b.setTitle("Ordre de mission");
 		  b.setAllowed_roles(r);
 		  b.setNeeds_form(true);
 		  b.setRequires_approval(true);
+		  b.setAllowed_personnel(t3);
 		  dr.save(b);
 		  
 		  c.setTitle("Autorisation de Quitter le Territoire National");
 		  c.setAllowed_roles(r);
 		  c.setNeeds_form(true);
 		  c.setRequires_approval(true);
+		  c.setAllowed_personnel(t3);
 		  dr.save(c);
 		  
 		  d.setTitle("Decision de congé");
 		  d.setAllowed_roles(r);
 		  d.setNeeds_form(true);
 		  d.setRequires_approval(true);
+		  d.setAllowed_personnel(t3);
 		  dr.save(d);
 		  
 		  e.setTitle("Situation Administrative");
 		  e.setAllowed_roles(r);
 		  e.setNeeds_form(false);
 		  e.setRequires_approval(false);
+		  e.setAllowed_personnel(t3);
 		  dr.save(e);
 		  
 		  f.setTitle("Autorisation d'absence hors periode de vacances");
 		  f.setAllowed_roles(r);
 		  f.setNeeds_form(true);
 		  f.setRequires_approval(true);
+		  f.setAllowed_personnel(t1);
 		  dr.save(f);
 		  
 		  g.setTitle("استفسار");
 		  g.setAllowed_roles(rlayer3only);
 		  g.setNeeds_form(true);
 		  g.setRequires_approval(false);
+		  g.setAllowed_personnel(t3);
 		  dr.save(g);
 	  }
 	  

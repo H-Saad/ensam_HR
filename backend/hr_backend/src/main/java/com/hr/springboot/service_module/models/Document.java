@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
 
 import com.hr.springboot.userData_module.models.Role;
+import com.hr.springboot.userData_module.models.Type_personnel;
 
 @Entity
 public class Document {
@@ -32,18 +33,30 @@ public class Document {
 	private Set<Role> allowed_roles;
 	private boolean needs_form;
 	private boolean requires_approval;
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinTable(name="DOC_PERS",
+		joinColumns = {
+				@JoinColumn(name="DOC_ID")
+		},
+		inverseJoinColumns = {
+				@JoinColumn(name="PERS_ID")
+		}
+	)
+	private Set<Type_personnel> allowed_personnel;
 	
 	public Document() {
 		
 	}
 
-	public Document(int id, String title, Set<Role> allowed_roles, boolean needs_form, boolean requires_approval) {
+	public Document(int id, String title, Set<Role> allowed_roles, boolean needs_form, boolean requires_approval,
+			Set<Type_personnel> allowed_personnel) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.allowed_roles = allowed_roles;
 		this.needs_form = needs_form;
 		this.requires_approval = requires_approval;
+		this.allowed_personnel = allowed_personnel;
 	}
 
 	public int getId() {
@@ -91,6 +104,13 @@ public class Document {
 		return "Document [id=" + id + ", title=" + title + ", allowed_roles=" + allowed_roles + ", needs_form="
 				+ needs_form + ", requires_approval=" + requires_approval + "]";
 	}
-	
+
+	public Set<Type_personnel> getAllowed_personnel() {
+		return allowed_personnel;
+	}
+
+	public void setAllowed_personnel(Set<Type_personnel> allowed_personnel) {
+		this.allowed_personnel = allowed_personnel;
+	}
 	
 }

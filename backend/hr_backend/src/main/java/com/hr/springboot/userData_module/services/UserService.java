@@ -34,11 +34,11 @@ public class UserService {
 	
 	public void initRoleUser() {
 		Type_personnel t1 = new Type_personnel();
-		t1.setType("Enseignant");
+		t1.setId("Enseignant");
 		tr.save(t1);
 		
 		Type_personnel t2 = new Type_personnel();
-		t2.setType("Administratif");
+		t2.setId("Administratif");
 		tr.save(t2);
 		
 		Role userRole = new Role();
@@ -86,6 +86,27 @@ public class UserService {
 		u1.setDate_recrutement(LocalDate.now());
 		u1.setAR_nom("حديش");
 		u1.setAR_prenom("سعد");
+		
+		User u6 = new User();
+		u6.setNom("Hadiche");
+		u6.setPrenom("Saad");
+		u6.setGenre("masculin");
+		u6.setEmail("user2@gmail.com");
+		u6.setPassword(getEncodedPassword("user2"));
+		u6.setPpr(12932);
+		u6.setCin("BB124343");
+		u6.setDate_naissance(LocalDate.of(2000, 10, 10));
+		u6.setLieu_naissance("Casablanca");
+		u6.setFonction_exerce("Professeur d'enseignement superieur");
+		u6.setGrade("No clue");
+		u6.setDate_affectation_enseignement(LocalDate.now());
+		u6.setDate_affectation_MESRSFC(LocalDate.now());
+		u6.setDate_effet_echelon(LocalDate.now());
+		u6.setDate_effet_grade(LocalDate.now());
+		u6.setDate_recrutement(LocalDate.now());
+		u6.setAR_nom("حديش");
+		u6.setAR_prenom("سعد");
+		
 
 		Set<Role> temp1 = new HashSet<Role>();
 		temp1.add(userRole);
@@ -94,6 +115,14 @@ public class UserService {
 		u1.setRole(temp1);
 		u1.setType_personnel(temp2);
 		ur.save(u1);
+		
+		Set<Role> temp12 = new HashSet<Role>();
+		temp12.add(userRole);
+		Set<Type_personnel> temp22 = new HashSet<Type_personnel>();
+		temp22.add(t2);
+		u6.setRole(temp12);
+		u6.setType_personnel(temp22);
+		ur.save(u6);
 		
 		User u2 = new User();
 		u2.setEmail("layer3@gmail.com");

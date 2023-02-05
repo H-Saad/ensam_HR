@@ -62,7 +62,7 @@ public class DocController {
 	@PreAuthorize("hasRole('User')" + "|| hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
 	@GetMapping("getAllowed")
 	public ResponseEntity<ArrayList<HashMap<String,String>>> getDocs(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
-		List<Document> l =ds.getDocList(util.getUserAuthority(auth));
+		List<Document> l =ds.getDocList(util.getUserfromToken(auth));
 		ArrayList<HashMap<String,String>> jl = new ArrayList<HashMap<String,String>>();
 		for(Document d : l) {
 			HashMap<String,String> temp = new HashMap<String,String>();

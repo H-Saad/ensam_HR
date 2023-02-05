@@ -10,34 +10,22 @@ import javax.persistence.Table;
 @Table(name="Type_personnel")
 public class Type_personnel {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String type;
+	private String id;
 	
 	public Type_personnel() {
 		
 	}
 
-	public Type_personnel(int id, String type) {
+	public Type_personnel(String id) {
 		super();
 		this.id = id;
-		this.type = type;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-	
 }
