@@ -84,6 +84,8 @@ public class UserService {
 		u1.setDate_effet_echelon(LocalDate.now());
 		u1.setDate_effet_grade(LocalDate.now());
 		u1.setDate_recrutement(LocalDate.now());
+		u1.setAR_nom("حديش");
+		u1.setAR_prenom("سعد");
 
 		Set<Role> temp1 = new HashSet<Role>();
 		temp1.add(userRole);

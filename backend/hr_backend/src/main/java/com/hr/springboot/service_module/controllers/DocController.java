@@ -86,10 +86,12 @@ public class DocController {
 	@PostMapping("fill")
 	public ResponseEntity<HashMap<String,String>> fill(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,Object> req) throws CsvValidationException, IOException, Exception {
 		User u = util.getUserfromToken(auth);
+		System.out.println(u.getAR_nom());
 		HashMap<String,String> ret = new HashMap<String,String>();
 		Document d = dr.findById(Integer.parseInt((String)req.get("id"))).get();
 		String filename = "";
 		if(!d.isNeeds_form()) {
+			System.out.println("Needs form: "+d.isNeeds_form());
 			filename = ds.generate_doc(u, d, ds.getDbMappings(u, d));
 			System.out.println(ds.getDbMappings(u, d));
 			Request r = vs.createRequest(u, d, filename);
@@ -106,6 +108,7 @@ public class DocController {
 			}
 		}
 		else {
+			System.out.println("Needs form: "+d.isNeeds_form());
 			HashMap<String,String> mappings = new HashMap<String,String>();
 			ArrayList<HashMap<String,String>> a = (ArrayList<HashMap<String, String>>) req.get("vars");
 			HashMap<String,String> temp = new HashMap<String,String>();
@@ -116,6 +119,7 @@ public class DocController {
 			mappings.putAll(ds.getDbMappings(u, d));
 			filename = ds.generate_doc(u ,d, mappings);
 			Request r = vs.createRequest(u, d, filename);
+			System.out.println(d.isRequires_approval());
 			if(d.isRequires_approval()) {
 				//notify user that his request has been created
 				ns.makeNotif(u, u , r, nd.reqCreated(d));
