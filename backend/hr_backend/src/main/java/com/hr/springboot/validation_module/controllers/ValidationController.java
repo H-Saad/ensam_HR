@@ -280,4 +280,19 @@ public class ValidationController {
 		ns.makeNotif(u, u, p, nd.refuse(p));
 		return ResponseEntity.status(200).body(new JSONObject());
 	}
+	
+	@PreAuthorize("hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
+	@GetMapping("allPending")
+	public List<HashMap<String,Object>> allpending(){
+		List<Pending_request> lp = pr.findAll();
+		List<HashMap<String,Object>> ret = new ArrayList<HashMap<String,Object>>();
+		for(Pending_request cr: lp) {
+			HashMap<String,Object> temp = new HashMap<String,Object>();
+			temp.put("pending_request", cr);
+			temp.put("source_user", ur.findById(cr.getUser_id()).get());
+			temp.put("document", dr.findById(cr.getDocument_id()).get());
+			ret.add(temp);
+		}
+		return ret;
+	}
 }
