@@ -30,10 +30,6 @@ public class NotifDict {
 		return "Vous avez approuvé la requête numéro: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle();
 	}
 	
-	public String approvedBy(User u, Request r) {
-		return "Votre requête numéro: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle() + " a été approuvé par: " + u.getNom() + " " + u.getPrenom();
-	}
-	
 	public String refuse(Request r) {
 		return "Vous avez refusé la requête numéro: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle();
 	}

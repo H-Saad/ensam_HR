@@ -22,7 +22,7 @@ public class Notification {
 	private String request_type;
 	
 	public Notification() {
-		
+		this.timestamp = LocalDateTime.now();
 	}
 
 	public Notification(int id, int from_id, int to_id, int request_id, String description, LocalDateTime timestamp,

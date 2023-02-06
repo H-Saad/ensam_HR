@@ -74,7 +74,7 @@ public class ValidationService {
 		p.setL3_file(filename);
 		pr.save(p);
 		//notifier l'utilisateur que sa requete est approuve
-		ns.makeNotif(u, ur.findById(p.getUser_id()).get(), p, nd.approvedBy(u, p));
+		//ns.makeNotif(u, ur.findById(p.getUser_id()).get(), p, nd.approvedBy(u, p));
 	}
 	
 	public void completeRequest(Pending_request p) {
