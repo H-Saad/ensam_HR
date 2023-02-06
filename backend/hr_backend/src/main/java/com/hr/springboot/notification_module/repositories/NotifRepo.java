@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.hr.springboot.notification_module.models.Notification;
 
 public interface NotifRepo extends JpaRepository<Notification, Integer>{
-	@Query(value = "SELECT * FROM notification WHERE to = ?", nativeQuery = true)
+	@Query(value = "SELECT * FROM notification WHERE to_id = ?", nativeQuery = true)
 	List<Notification> findAllbyUserID(int id);
 }

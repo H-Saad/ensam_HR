@@ -40,21 +40,12 @@ public class Test {
 	DocService dr;
 	
 	/*@PostConstruct
-	public void initTestcases() {
+	public void initTestcases() throws IOException {
 		us.initRoleUser();
 		dr.initTestDocs();
-	}*/
+		//dr.genererFichierPlat();
+	}*/	
 	
-	
-	@PreAuthorize("hasRole('User')")
-	@PostMapping("madness2")
-	public void madness2(@RequestBody HashMap<String,Object> req) {
-		ArrayList<HashMap<String,String>> a = (ArrayList<HashMap<String, String>>) req.get("vars");
-		for(HashMap<String,String> b : a) {
-			System.out.println(b.get("varname"));
-			System.out.println(b.get("value"));
-		}
-	}
 	
 	@PreAuthorize("hasRole('User')")
 	@GetMapping("madness")

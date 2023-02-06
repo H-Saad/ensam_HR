@@ -78,6 +78,9 @@ public class DocController {
 	@GetMapping("getFormVars/{doc_id}")
 	public ResponseEntity<ArrayList<HashMap<String,String>>> getFormVars(@PathVariable int doc_id) throws CsvValidationException, IOException{
 		Document d = dr.findById(doc_id).get();
+		if(d.getTitle().equals("Fichier plat")) {
+			return ResponseEntity.status(200).body(new ArrayList<HashMap<String,String>>());
+		}
 		ArrayList<HashMap<String,String>> ret = new ArrayList<HashMap<String,String>>(ds.getFillableVars(d));
 		return ResponseEntity.status(200).body(ret);
 	}
@@ -90,6 +93,14 @@ public class DocController {
 		HashMap<String,String> ret = new HashMap<String,String>();
 		Document d = dr.findById(Integer.parseInt((String)req.get("id"))).get();
 		String filename = "";
+		System.out.println(d.getTitle());
+		if(d.getTitle().equals("Fichier plat")) {
+			filename = ds.genererFichierPlat();
+			Request r = vs.createRequest(u, d, filename);
+			vs.completeRequest((Pending_request) r);
+			ns.makeNotif(u, u, r, nd.reqSaved(d));
+			return ResponseEntity.status(200).body(ret);
+		}
 		if(!d.isNeeds_form()) {
 			System.out.println("Needs form: "+d.isNeeds_form());
 			filename = ds.generate_doc(u, d, ds.getDbMappings(u, d));

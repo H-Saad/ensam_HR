@@ -25,8 +25,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.poi.xwpf.converter.pdf.PdfConverter;
-import org.apache.poi.xwpf.converter.pdf.PdfOptions;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.docx4j.Docx4J;
 import org.docx4j.XmlUtils;
@@ -359,7 +361,7 @@ public class DocService {
 	  }
 	  
 	  public void initTestDocs() {
-		  Document a,b,c,d,e,f,g;
+		  Document a,b,c,d,e,f,g,h;
 		  a = new Document();
 		  b = new Document();
 		  c = new Document();
@@ -367,6 +369,7 @@ public class DocService {
 		  e = new Document();
 		  f = new Document();
 		  g = new Document();
+		  h = new Document();
 		  
 		  HashSet<Type_personnel> t1 = new HashSet<Type_personnel>();
 		  HashSet<Type_personnel> t2 = new HashSet<Type_personnel>();
@@ -389,6 +392,11 @@ public class DocService {
 		  
 		  HashSet<Role> rlayer3only = new HashSet<Role>();
 		  rlayer3only.add(rs.getRole(CONSTS.L3_ROLE));
+		  
+		  HashSet<Role> r3 = new HashSet<Role>();
+		  r3.add(rs.getRole(CONSTS.L1_ROLE));
+		  r3.add(rs.getRole(CONSTS.L2_ROLE));
+		  r3.add(rs.getRole(CONSTS.L3_ROLE));
 		  
 		  a.setTitle("Attestation de Travail");
 		  a.setAllowed_roles(r2);
@@ -438,6 +446,13 @@ public class DocService {
 		  g.setRequires_approval(false);
 		  g.setAllowed_personnel(t3);
 		  dr.save(g);
+		  
+		  h.setTitle("Fichier plat");
+		  h.setAllowed_roles(r3);
+		  h.setNeeds_form(false);
+		  h.setRequires_approval(false);
+		  h.setAllowed_personnel(t3);
+		  dr.save(h);
 	  }
 	  
 	  public String generateUniqueFileName(User u, Document d) {
@@ -475,4 +490,110 @@ public class DocService {
 	            throw new RuntimeException(e);
 	        }
 	    }
+	  
+	  public String genererFichierPlat() throws IOException {
+		  List<User> users = ur.findAll();
+		  String filename = "fichier plat";
+		  
+		  XSSFWorkbook workbook = new XSSFWorkbook();
+	      XSSFSheet sheet = workbook.createSheet("Fichier plat");
+	 
+	        int rowCount = -1;
+	        int columnCount = -1;
+	        
+	        Row row = sheet.createRow(++rowCount);
+	        Cell cell = row.createCell(++columnCount);
+	        cell.setCellValue("Code_etablissement");
+	        Cell cell1 = row.createCell(++columnCount);
+	        cell1.setCellValue("Code Annee");
+	        Cell cell2 = row.createCell(++columnCount);
+	        cell2.setCellValue("PPR");
+	        Cell cell3 = row.createCell(++columnCount);
+	        cell3.setCellValue("Nom");
+	        Cell cell4 = row.createCell(++columnCount);
+	        cell4.setCellValue("Prenom");
+	        Cell cell5 = row.createCell(++columnCount);
+	        cell5.setCellValue("Genre");
+	        Cell cell6 = row.createCell(++columnCount);
+	        cell6.setCellValue("Date_Naissance");
+	        Cell cell7 = row.createCell(++columnCount);
+	        cell7.setCellValue("Lieu de Naissance");
+	        Cell cell8 = row.createCell(++columnCount);
+	        cell8.setCellValue("Code_Nationalité");
+	        Cell cell9 = row.createCell(++columnCount);
+	        cell9.setCellValue("Code_Grade");
+	        Cell cell10 = row.createCell(++columnCount);
+	        cell10.setCellValue("Type_personnel");
+	        Cell cell11 = row.createCell(++columnCount);
+	        cell11.setCellValue("Date_recrutement");
+	        Cell cell12 = row.createCell(++columnCount);
+	        cell12.setCellValue("Date_affectation_MESRSFC");
+	        Cell cell13 = row.createCell(++columnCount);
+	        cell13.setCellValue("Nombre de diplôme");
+	        Cell cell14 = row.createCell(++columnCount);
+	        cell14.setCellValue("Diplome");
+	        Cell cell15 = row.createCell(++columnCount);
+	        cell15.setCellValue("Specialite");
+	        Cell cell16 = row.createCell(++columnCount);
+	        cell16.setCellValue("Universite_etablissement_diplomante");
+	        Cell cell17 = row.createCell(++columnCount);
+	        cell17.setCellValue("Autres diplômes");
+	        Cell cell18 = row.createCell(++columnCount);
+	        cell18.setCellValue("service_affectation");
+	         
+	        for (User u : users) {
+	        	columnCount = -1;
+	        	String z = "";
+	        	Set<Type_personnel>tp = u.getType_personnel();
+	        	for(Type_personnel t:tp) {
+					z = t.getId();
+				}
+	        	Row row2 = sheet.createRow(++rowCount);
+	        	Cell cell0 = row2.createCell(++columnCount);
+	        	cell0.setCellValue(u.getCode_etablissement());
+		        Cell cell100 = row2.createCell(++columnCount);
+		        cell100.setCellValue(u.getCode_annee());
+		        Cell cell20 = row2.createCell(++columnCount);
+		        cell20.setCellValue(u.getPpr());
+		        Cell cell30 = row2.createCell(++columnCount);
+		        cell30.setCellValue(u.getNom());
+		        Cell cell40 = row2.createCell(++columnCount);
+		        cell40.setCellValue(u.getPrenom());
+		        Cell cell50 = row2.createCell(++columnCount);
+		        cell50.setCellValue(u.getGenre());
+		        Cell cell60 = row2.createCell(++columnCount);
+		        cell60.setCellValue(u.getDate_naissance());
+		        Cell cell70 = row2.createCell(++columnCount);
+		        cell70.setCellValue(u.getLieu_naissance());
+		        Cell cell80 = row2.createCell(++columnCount);
+		        cell80.setCellValue(u.getCode_nationalite());
+		        Cell cell90 = row2.createCell(++columnCount);
+		        cell90.setCellValue(u.getCode_grade());
+		        Cell cell1000 = row2.createCell(++columnCount);
+		        cell1000.setCellValue(z);
+		        Cell cell110 = row2.createCell(++columnCount);
+		        cell110.setCellValue(u.getDate_recrutement());
+		        Cell cell120 = row2.createCell(++columnCount);
+		        cell120.setCellValue(u.getDate_affectation_MESRSFC());
+		        Cell cell130 = row2.createCell(++columnCount);
+		        cell130.setCellValue(u.getNombre_diplomes());
+		        Cell cell140 = row2.createCell(++columnCount);
+		        cell140.setCellValue(u.getDiplome());
+		        Cell cell150 = row2.createCell(++columnCount);
+		        cell150.setCellValue(u.getSpecialite());
+		        Cell cell160 = row2.createCell(++columnCount);
+		        cell160.setCellValue(u.getUniv_etablissement_diplomate());
+		        Cell cell170 = row2.createCell(++columnCount);
+		        cell170.setCellValue("");
+		        Cell cell180 = row2.createCell(++columnCount);	
+		        cell180.setCellValue(u.getService_affectation());
+	        }
+	         
+	        String filepath = System.getProperty("user.dir") + CONSTS.DOC_DIR;
+	         
+	        try (FileOutputStream outputStream = new FileOutputStream(filepath+filename+".xlsx")) {
+	            workbook.write(outputStream);
+	        }
+	        return filename;
+	  }
 }
