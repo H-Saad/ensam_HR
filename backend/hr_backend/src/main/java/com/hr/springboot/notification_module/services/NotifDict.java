@@ -19,35 +19,35 @@ public class NotifDict {
 	private UserRepo ur;
 	
 	public String reqSaved(Document d) {
-		return "Document sauvegarde " + d.getTitle();
+		return "Document sauvegardé " + d.getTitle();
 	}
 	
 	public String reqCreated(Document d) {
-		return "Demande cree avec succes: " + d.getTitle();
+		return "Demande cree avec succès: " + d.getTitle();
 	}
 	
 	public String approve(Request r) {
-		return "Vous avez approuve la requete numero: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle();
+		return "Vous avez approuvé la requête numéro: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle();
 	}
 	
 	public String approvedBy(User u, Request r) {
-		return "Votre requete numero: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle() + " a ete approuve par: " + u.getNom() + " " + u.getPrenom();
+		return "Votre requête numéro: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle() + " a été approuvé par: " + u.getNom() + " " + u.getPrenom();
 	}
 	
 	public String refuse(Request r) {
-		return "Vous avez refuse la requete numero: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle();
+		return "Vous avez refusé la requête numéro: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle();
 	}
 	
 	public String refusedBy(User u, Request r) {
-		return "Votre requete numero: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle() + " a ete refuse par: " + u.getNom() + " " + u.getPrenom();
+		return "Votre requête numéro: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle() + " a été refusé par: " + u.getNom() + " " + u.getPrenom();
 	}
 	
 	public String pendingReq(Request r) {
-		return "Vous avez une requete en attente numero: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle() + " de la part de: " + ur.findById(r.getUser_id()).get().getNom() +
+		return "Vous avez une requête en attente numéro: " + r.getId() + " : " + dr.findById(r.getDocument_id()).get().getTitle() + " de la part de: " + ur.findById(r.getUser_id()).get().getNom() +
 				" " + ur.findById(r.getUser_id()).get().getPrenom();
 	}
 	
 	public String complete(Request r) {
-		return "Votre document: " + dr.findById(r.getDocument_id()).get().getTitle() + " est pret pour etre recupere";
+		return "Votre document: " + dr.findById(r.getDocument_id()).get().getTitle() + " est prêt pour être récupéré";
 	}
 }
