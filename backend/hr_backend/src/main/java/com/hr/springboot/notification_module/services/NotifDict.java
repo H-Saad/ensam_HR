@@ -46,4 +46,8 @@ public class NotifDict {
 	public String complete(Request r) {
 		return "Votre document: " + dr.findById(r.getDocument_id()).get().getTitle() + " est prêt pour être récupéré";
 	}
+	
+	public String newRetraite() {
+		return "Un nouvel utilisateur a atteint la barre de 15 mois avant sa retraite.";
+	}
 }

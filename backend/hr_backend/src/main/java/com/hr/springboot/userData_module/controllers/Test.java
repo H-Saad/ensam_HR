@@ -44,7 +44,7 @@ public class Test {
 		us.initRoleUser();
 		dr.initTestDocs();
 		//dr.genererFichierPlat();
-	}*/	
+	}*/
 	
 	
 	@PreAuthorize("hasRole('User')")

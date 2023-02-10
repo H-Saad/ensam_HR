@@ -1,0 +1,10 @@
+﻿db_arPrenom,string,الاسم الشخصي ,FALSE
+db_arNom,string,الاســـــم العائلي,FALSE
+db_dateN,string,تاريــــخ الازدياد,FALSE
+db_ppr,date,رقم التأجيــــــــر ,FALSE
+db_cin,date,رقــــــــم ب.ت.و,FALSE
+db_grade,text,الـــــدرجــــــــــة ,FALSE
+date_deb,date,من,TRUE
+date_fin,date,إلى,TRUE
+date_ret,date,تاريخ استئناف العمل,TRUE
+db_currDate,date,Current date,FALSE

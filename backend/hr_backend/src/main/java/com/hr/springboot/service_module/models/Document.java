@@ -43,13 +43,14 @@ public class Document {
 		}
 	)
 	private Set<Type_personnel> allowed_personnel;
+	private boolean showable;
 	
 	public Document() {
-		
+		this.showable = true;
 	}
 
 	public Document(int id, String title, Set<Role> allowed_roles, boolean needs_form, boolean requires_approval,
-			Set<Type_personnel> allowed_personnel) {
+			Set<Type_personnel> allowed_personnel, boolean showable) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -57,6 +58,7 @@ public class Document {
 		this.needs_form = needs_form;
 		this.requires_approval = requires_approval;
 		this.allowed_personnel = allowed_personnel;
+		this.showable = showable;
 	}
 
 	public int getId() {
@@ -112,5 +114,12 @@ public class Document {
 	public void setAllowed_personnel(Set<Type_personnel> allowed_personnel) {
 		this.allowed_personnel = allowed_personnel;
 	}
-	
+
+	public boolean isShowable() {
+		return showable;
+	}
+
+	public void setShowable(boolean showable) {
+		this.showable = showable;
+	}
 }

@@ -17,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.hr.springboot.jwt.services.JwtService;
 import com.hr.springboot.jwt.util.JwtUtil;
+import com.hr.springboot.userData_module.models.User;
 
 import io.jsonwebtoken.ExpiredJwtException;
 

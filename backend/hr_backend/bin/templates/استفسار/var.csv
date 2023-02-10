@@ -1,0 +1,6 @@
+db_arFullname,string,Nom en Arabe,FALSE
+db_ppr,string,رقم التأجير,FALSE
+db_grade,string,متصرف من الدرجة,FALSE
+date_deb_abs,date,debut absence,TRUE
+date_fin_abs,date,fin absence,TRUE
+rep_prof,text,جواب المعني بالأمر,TRUE

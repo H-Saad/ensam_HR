@@ -17,7 +17,7 @@ import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name="User")
-public class User {
+public class User{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -73,9 +73,11 @@ public class User {
 	private String AR_nom;
 	private String AR_prenom;
 	private String num_tel;
+	private boolean retraite_flag;
 	
 	public User() {
 		this.disabled = false;
+		this.retraite_flag = false;
 	}
 
 	public User(int id, int code_etablissement, int code_annee, int ppr, String nom, String prenom, String genre,
@@ -85,7 +87,7 @@ public class User {
 			String departement, int nombre_diplomes, String diplome, String specialite,
 			String univ_etablissement_diplomate, String fonction_exerce, String service_affectation, String grade,
 			LocalDate date_effet_grade, String echelon, LocalDate date_effet_echelon, Set<Role> role, boolean disabled,
-			String aR_nom, String aR_prenom, String num_tel) {
+			String aR_nom, String aR_prenom, String num_tel, boolean retraite_flag) {
 		super();
 		this.id = id;
 		this.code_etablissement = code_etablissement;
@@ -122,6 +124,7 @@ public class User {
 		AR_nom = aR_nom;
 		AR_prenom = aR_prenom;
 		this.num_tel = num_tel;
+		this.retraite_flag = retraite_flag;
 	}
 
 	public int getId() {
@@ -420,5 +423,12 @@ public class User {
 				+ date_effet_echelon + ", role=" + role + ", disabled=" + disabled + ", AR_nom=" + AR_nom
 				+ ", AR_prenom=" + AR_prenom + ", num_tel=" + num_tel + "]";
 	}
-	
+
+	public boolean isRetraite_flag() {
+		return retraite_flag;
+	}
+
+	public void setRetraite_flag(boolean retraite_flag) {
+		this.retraite_flag = retraite_flag;
+	}
 }
