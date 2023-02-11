@@ -20,10 +20,14 @@ public class NotifService {
 		Notification n = new Notification();
 		n.setFrom(from.getId());
 		n.setTo(to.getId());
-		n.setRequest_id(r.getId());
+		if(r != null) {
+			n.setRequest_id(r.getId());
+		}
 		n.setDescription(desc);
 		n.setRead(false);
-		n.setRequest_type(r.getType());
+		if(r != null) {
+			n.setRequest_type(r.getType());
+		}		
 		
 		nr.save(n);
 	}

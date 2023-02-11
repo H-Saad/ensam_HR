@@ -724,4 +724,9 @@ public class DocService {
 	        workbook.close();
 	        return filename;
 	  }
+	  
+	  //todo later
+	  public String genererVieCommunal() {
+		  return null;
+	  }
 }

@@ -1,10 +1,18 @@
-db_pronom,string,Mr/Mme,false
-db_fullname,string,Nom et Prenom,false
-db_ppr,string,Ppr,false
-db_cin,string,Cin,false
-db_dateN,date,Date de naissance,false
-db_lieuN,string,Lieu de naissance,false
-db_fctE,string,Fonction exercÃ©e,false
-date_dep,date,Date de depart,true
-date_ret,date,Date d'arrivÃ©e,true
-db_currDate,date,Current date,false
+db_pronom,string,Mr/Mme,FALSE
+db_fullname,string,Nom et Prenom,FALSE
+db_ppr,string,Ppr,FALSE
+db_cin,string,Cin,FALSE
+db_dateN,date,Date de naissance,FALSE
+db_lieuN,string,Lieu de naissance,FALSE
+db_fctE,string,Fonction exercÃƒÂ©e,FALSE
+date_dep,date,Date de depart,TRUE
+date_ret,date,Date d'arrivÃƒÂ©e,TRUE
+db_currDate,date,Current date,FALSE
+motif,list1,Motif,TRUE
+séminaire,choice1,,TRUE
+conférence,choice1,,TRUE
+thése,choice1,,TRUE
+mobilité ,choice1,,TRUE
+stage,choice1,,TRUE
+formation,choice1,,TRUE
+partenariat,choice1,,TRUE

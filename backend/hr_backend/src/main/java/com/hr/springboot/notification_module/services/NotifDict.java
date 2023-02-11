@@ -50,4 +50,13 @@ public class NotifDict {
 	public String newRetraite() {
 		return "Un nouvel utilisateur a atteint la barre de 15 mois avant sa retraite.";
 	}
+	public String newExceptionel(User u) {
+		return u.getNom() + " " + u.getPrenom() + " est éligible pour une augmentation de grade exceptionel";
+	}
+	public String newRapide(User u) {
+		return u.getNom() + " " + u.getPrenom() + " est éligible pour une augmentation de grade rapide";
+	}
+	public String newNormal(User u) {
+		return u.getNom() + " " + u.getPrenom() + " est éligible pour une augmentation de grade normal";
+	}
 }
