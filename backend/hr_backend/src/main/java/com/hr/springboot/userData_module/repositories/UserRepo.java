@@ -18,10 +18,10 @@ public interface UserRepo extends JpaRepository<User, Integer>{
 	@Query(value = "SELECT * FROM user WHERE disabled=true", nativeQuery = true)
 	List<User> findAllDisabled();
 	
-	@Query(value = "select * from user u, type_personnel t, user_type ut where u.id = ut.user_id and t.id = ut.type_id and ut.type_id = Administratif", nativeQuery = true)
+	@Query(value = "select * from user u, type_personnel t, user_type ut where u.id = ut.user_id and t.id = ut.type_id and ut.type_id = 'Administratif'", nativeQuery = true)
 	List<User> findAllAdministratif();
 	
-	@Query(value = "select * from user u, type_personnel t, user_type ut where u.id = ut.user_id and t.id = ut.type_id and ut.type_id = Enseignant", nativeQuery = true)
+	@Query(value = "select * from user u, type_personnel t, user_type ut where u.id = ut.user_id and t.id = ut.type_id and ut.type_id = 'Enseignant'", nativeQuery = true)
 	List<User> findAllEnseignant();
 	
 	@Query(value = "select * from user where retraite_flag = false", nativeQuery = true)

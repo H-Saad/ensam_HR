@@ -78,7 +78,7 @@ public class DocController {
 	@GetMapping("getFormVars/{doc_id}")
 	public ResponseEntity<ArrayList<HashMap<String,String>>> getFormVars(@PathVariable int doc_id) throws CsvValidationException, IOException{
 		Document d = dr.findById(doc_id).get();
-		if(d.getTitle().equals("Fichier plat")) {
+		if(!d.isNeeds_form()) {
 			return ResponseEntity.status(200).body(new ArrayList<HashMap<String,String>>());
 		}
 		ArrayList<HashMap<String,String>> ret = new ArrayList<HashMap<String,String>>(ds.getFillableVars(d));
@@ -89,7 +89,6 @@ public class DocController {
 	@PostMapping("fill")
 	public ResponseEntity<HashMap<String,String>> fill(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,Object> req) throws CsvValidationException, IOException, Exception {
 		User u = util.getUserfromToken(auth);
-		System.out.println(u.getAR_nom());
 		HashMap<String,String> ret = new HashMap<String,String>();
 		Document d = dr.findById(Integer.parseInt((String)req.get("id"))).get();
 		String filename = "";

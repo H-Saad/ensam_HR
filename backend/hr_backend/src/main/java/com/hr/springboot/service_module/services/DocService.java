@@ -582,7 +582,7 @@ public class DocService {
 		        Cell cell50 = row2.createCell(++columnCount);
 		        cell50.setCellValue(u.getGenre());
 		        Cell cell60 = row2.createCell(++columnCount);
-		        cell60.setCellValue(u.getDate_naissance());
+		        cell60.setCellValue(u.getDate_naissance().toString());
 		        Cell cell70 = row2.createCell(++columnCount);
 		        cell70.setCellValue(u.getLieu_naissance());
 		        Cell cell80 = row2.createCell(++columnCount);
@@ -592,9 +592,9 @@ public class DocService {
 		        Cell cell1000 = row2.createCell(++columnCount);
 		        cell1000.setCellValue(z);
 		        Cell cell110 = row2.createCell(++columnCount);
-		        cell110.setCellValue(u.getDate_recrutement());
+		        cell110.setCellValue(u.getDate_recrutement().toString());
 		        Cell cell120 = row2.createCell(++columnCount);
-		        cell120.setCellValue(u.getDate_affectation_MESRSFC());
+		        cell120.setCellValue(u.getDate_affectation_MESRSFC().toString());
 		        Cell cell130 = row2.createCell(++columnCount);
 		        cell130.setCellValue(u.getNombre_diplomes());
 		        Cell cell140 = row2.createCell(++columnCount);
@@ -615,15 +615,15 @@ public class DocService {
 	            workbook.write(outputStream);
 	        }
 	        workbook.close();
-	        return filename;
+	        return filename+".xlsx";
 	  }
 	  
 	  public String genererFichierPlatEnseignant() throws IOException {
 		  List<User> users = ur.findAllEnseignant();
-		  String filename = "fichier plat";
+		  String filename = "Fichier plat enseignant";
 		  
 		  XSSFWorkbook workbook = new XSSFWorkbook();
-	      XSSFSheet sheet = workbook.createSheet("Fichier plat");
+	      XSSFSheet sheet = workbook.createSheet("Fichier plat enseignant");
 	 
 	        int rowCount = -1;
 	        int columnCount = -1;
@@ -689,7 +689,7 @@ public class DocService {
 		        Cell cell50 = row2.createCell(++columnCount);
 		        cell50.setCellValue(u.getGenre());
 		        Cell cell60 = row2.createCell(++columnCount);
-		        cell60.setCellValue(u.getDate_naissance());
+		        cell60.setCellValue(u.getDate_naissance().toString());
 		        Cell cell70 = row2.createCell(++columnCount);
 		        cell70.setCellValue(u.getLieu_naissance());
 		        Cell cell80 = row2.createCell(++columnCount);
@@ -699,9 +699,9 @@ public class DocService {
 		        Cell cell1000 = row2.createCell(++columnCount);
 		        cell1000.setCellValue(z);
 		        Cell cell110 = row2.createCell(++columnCount);
-		        cell110.setCellValue(u.getDate_recrutement());
+		        cell110.setCellValue(u.getDate_recrutement().toString());
 		        Cell cell120 = row2.createCell(++columnCount);
-		        cell120.setCellValue(u.getDate_affectation_MESRSFC());
+		        cell120.setCellValue(u.getDate_affectation_MESRSFC().toString());
 		        Cell cell130 = row2.createCell(++columnCount);
 		        cell130.setCellValue(u.getNombre_diplomes());
 		        Cell cell140 = row2.createCell(++columnCount);
@@ -722,7 +722,7 @@ public class DocService {
 	            workbook.write(outputStream);
 	        }
 	        workbook.close();
-	        return filename;
+	        return filename+".xlsx";
 	  }
 	  
 	  //todo later
