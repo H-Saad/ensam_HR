@@ -93,6 +93,13 @@ public class DocController {
 		Document d = dr.findById(Integer.parseInt((String)req.get("id"))).get();
 		String filename = "";
 		System.out.println(d.getTitle());
+		if(d.getTitle().equals("Vie communal")) {
+			filename = ds.genererVieCommunal();
+			Request r = vs.createRequest(u, d, filename);
+			vs.completeRequest((Pending_request) r);
+			ns.makeNotif(u, u, r, nd.reqSaved(d));
+			return ResponseEntity.status(200).body(ret);
+		}
 		if(d.getTitle().equals("Fichier plat administratif")) {
 			filename = ds.genererFichierPlatAdministratif();
 			Request r = vs.createRequest(u, d, filename);

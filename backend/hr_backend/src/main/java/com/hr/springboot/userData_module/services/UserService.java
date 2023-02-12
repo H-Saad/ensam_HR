@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import com.hr.springboot.userData_module.repositories.TypeRepo;
 import com.hr.springboot.userData_module.repositories.UserRepo;
 
 @Service
+@Transactional
 public class UserService {
 
 	@Autowired
@@ -31,6 +34,8 @@ public class UserService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	public static final int max_attempts = 5;
 	
 	public void initRoleUser() {
 		Type_personnel t1 = new Type_personnel();
@@ -208,6 +213,28 @@ public class UserService {
 			 u.setPassword("");
 		 }
 		 return l;
+	 }
+	 
+	 public void increaseFailedAttempt(String email) {
+		 User u = ur.authFindByMail(email).get();
+		 int num = u.getLoginAttempts();
+		 num++;
+		 u.setLoginAttempts(num);
+		 ur.save(u);
+		 if(u.getLoginAttempts()>=3) lock(email);
+	 }
+	 
+	 public void lock(String email) {
+		 User u = ur.authFindByMail(email).get();
+		 u.setLocked(true);
+		 u.setLoginAttempts(0);
+		 ur.save(u);
+	 }
+	 
+	 public void resetAttempts(String email) {
+		 User u = ur.authFindByMail(email).get();
+		 u.setLoginAttempts(0);
+		 ur.save(u);
 	 }
 	 
 	 //tobeimplemented

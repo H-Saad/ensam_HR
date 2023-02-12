@@ -74,10 +74,14 @@ public class User{
 	private String AR_prenom;
 	private String num_tel;
 	private boolean retraite_flag;
+	private int loginAttempts;
+	private boolean locked;
 	
 	public User() {
 		this.disabled = false;
 		this.retraite_flag = false;
+		this.loginAttempts = 0;
+		this.locked = false;
 	}
 
 	public User(int id, int code_etablissement, int code_annee, int ppr, String nom, String prenom, String genre,
@@ -87,7 +91,7 @@ public class User{
 			String departement, int nombre_diplomes, String diplome, String specialite,
 			String univ_etablissement_diplomate, String fonction_exerce, String service_affectation, String grade,
 			LocalDate date_effet_grade, String echelon, LocalDate date_effet_echelon, Set<Role> role, boolean disabled,
-			String aR_nom, String aR_prenom, String num_tel, boolean retraite_flag) {
+			String aR_nom, String aR_prenom, String num_tel, boolean retraite_flag, int loginAttempts, boolean locked) {
 		super();
 		this.id = id;
 		this.code_etablissement = code_etablissement;
@@ -125,6 +129,24 @@ public class User{
 		AR_prenom = aR_prenom;
 		this.num_tel = num_tel;
 		this.retraite_flag = retraite_flag;
+		this.loginAttempts = loginAttempts;
+		this.locked = locked;
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public int getLoginAttempts() {
+		return loginAttempts;
+	}
+
+	public void setLoginAttempts(int loginAttempts) {
+		this.loginAttempts = loginAttempts;
 	}
 
 	public int getId() {

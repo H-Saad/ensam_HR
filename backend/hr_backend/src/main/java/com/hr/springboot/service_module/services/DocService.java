@@ -373,7 +373,7 @@ public class DocService {
 	  }
 	  
 	  public void initTestDocs() {
-		  Document a,b,c,d,e,f,g,h,i;
+		  Document a,b,c,d,e,f,g,h,i,j;
 		  a = new Document();
 		  b = new Document();
 		  c = new Document();
@@ -383,6 +383,7 @@ public class DocService {
 		  g = new Document();
 		  h = new Document();
 		  i = new Document();
+		  j = new Document();
 		  
 		  HashSet<Type_personnel> t1 = new HashSet<Type_personnel>();
 		  HashSet<Type_personnel> t2 = new HashSet<Type_personnel>();
@@ -473,6 +474,13 @@ public class DocService {
 		  i.setRequires_approval(false);
 		  i.setAllowed_personnel(t3);
 		  dr.save(i);
+		  
+		  j.setTitle("Vie communal");
+		  j.setAllowed_roles(r3);
+		  j.setNeeds_form(false);
+		  j.setRequires_approval(false);
+		  j.setAllowed_personnel(t3);
+		  dr.save(j);
 	  }
 	  
 	  public String generateUniqueFileName(User u, Document d) {
@@ -726,7 +734,54 @@ public class DocService {
 	  }
 	  
 	  //todo later
-	  public String genererVieCommunal() {
-		  return null;
+	  public String genererVieCommunal() throws FileNotFoundException, IOException {
+		  List<User> users = ur.findAllEnseignant();
+		  String filename = "Vie communal";
+		  
+		  XSSFWorkbook workbook = new XSSFWorkbook();
+	      XSSFSheet sheet = workbook.createSheet("Vie communal");
+	 
+	        int rowCount = -1;
+	        int columnCount = -1;
+	        
+	        Row row = sheet.createRow(++rowCount);
+	        Cell cell = row.createCell(++columnCount);
+	        cell.setCellValue("DOTI");
+	        Cell cell1 = row.createCell(++columnCount);
+	        cell1.setCellValue("NOM PRENOM");
+	        Cell cell2 = row.createCell(++columnCount);
+	        cell2.setCellValue("CIN");
+	        Cell cell3 = row.createCell(++columnCount);
+	        cell3.setCellValue("ADRESSE");
+	        Cell cell4 = row.createCell(++columnCount);
+	        cell4.setCellValue("POSITION");
+	         
+	        for (User u : users) {
+	        	columnCount = -1;
+	        	String z = "";
+	        	Set<Type_personnel>tp = u.getType_personnel();
+	        	for(Type_personnel t:tp) {
+					z = t.getId();
+				}
+	        	Row row2 = sheet.createRow(++rowCount);
+	        	Cell cell0 = row2.createCell(++columnCount);
+	        	cell0.setCellValue(u.getPpr());
+		        Cell cell100 = row2.createCell(++columnCount);
+		        cell100.setCellValue(u.getNom()+" "+u.getPrenom());
+		        Cell cell20 = row2.createCell(++columnCount);
+		        cell20.setCellValue(u.getCin());
+		        Cell cell30 = row2.createCell(++columnCount);
+		        cell30.setCellValue("no adresse");
+		        Cell cell40 = row2.createCell(++columnCount);
+		        cell40.setCellValue("A");
+	        }
+	         
+	        String filepath = System.getProperty("user.dir") + CONSTS.DOC_DIR;
+	         
+	        try (FileOutputStream outputStream = new FileOutputStream(filepath+filename+".xlsx")) {
+	            workbook.write(outputStream);
+	        }
+	        workbook.close();
+	        return filename+".xlsx";
 	  }
 }

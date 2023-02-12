@@ -26,4 +26,7 @@ public interface UserRepo extends JpaRepository<User, Integer>{
 	
 	@Query(value = "select * from user where retraite_flag = false", nativeQuery = true)
 	List<User> findAllNonRet();
+	
+	@Query(value = "SELECT * FROM user WHERE email = ?", nativeQuery = true)
+	Optional<User> authFindByMail(String mail);
 }
