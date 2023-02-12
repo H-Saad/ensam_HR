@@ -9,10 +9,10 @@ date_dep,date,Date de depart,TRUE
 date_ret,date,Date d'arrivÃƒÂ©e,TRUE
 db_currDate,date,Current date,FALSE
 motif,list1,Motif,TRUE
-séminaire,choice1,,TRUE
-conférence,choice1,,TRUE
-thése,choice1,,TRUE
-mobilité ,choice1,,TRUE
+sÃ©minaire,choice1,,TRUE
+confÃ©rence,choice1,,TRUE
+thÃ¨se,choice1,,TRUE
+mobilitÃ© ,choice1,,TRUE
 stage,choice1,,TRUE
 formation,choice1,,TRUE
 partenariat,choice1,,TRUE
