@@ -1,18 +1,18 @@
-﻿type_doc,string,نوع الوثيقة(التوظيف الجديد/الانتقال /المهام الجديدة/ إنهاء الإلحاق),true
-db_ardirectFull,string,الموقع أسفله,false
-db_arFullname,string,السيد أو السيدة أو الآنسة,false
-db_fullname,string,Nom et prenom,false
-db_dateN,date,تاريخ الازدياد,false
-db_lieuN,string,مكان الازدياد,false
-db_email,string,البريد الالكتروني,false
-db_tel,string,الهاتف,false
-db_codeN,string,الجنسية,false
-etat_civ,string,الحالة المدنية,true
-cadre,string,الإطار,true
-db_ppr,string,رقم التأجير,false
-prev_fct,string,المنصب القديم (في حالة الانتقال):.,true
-date_arri,date,قد حضرت بهذه المؤسسة بتاريخ,true
-db_fctE,string,لاستلام مهامها بصفتها,false
-type_fct,string,نوع الوظيف,true
-adress_ar,string,العنوان الخاص,false
-db_currDate,date,Current_date,false
+﻿type_doc;string;نوع الوثيقة(التوظيف الجديد/الانتقال /المهام الجديدة/ إنهاء الإلحاق);true
+db_ardirectFull;string;الموقع أسفله;false
+db_arFullname;string;السيد أو السيدة أو الآنسة;false
+db_fullname;string;Nom et prenom;false
+db_dateN ;date;تاريخ الازدياد;false
+db_lieuN ;string;مكان الازدياد;false
+db_email;string;البريد الالكتروني;false
+db_tel;string;الهاتف;false
+db_codeN ;string;الجنسية;false
+etat_civ ;string;الحالة المدنية;true
+cadre;string;الإطار;true
+db_ppr;string;رقم التأجير;false
+prev_fct ;string;المنصب القديم (في حالة الانتقال):.;true
+date_arri;date;قد حضرت بهذه المؤسسة بتاريخ;true
+db_fctE;string;لاستلام مهامها بصفتها;false
+type_fct;string;نوع الوظيف;true
+adress_ar;string;العنوان الخاص;false
+db_currDate;date;Current_date;false

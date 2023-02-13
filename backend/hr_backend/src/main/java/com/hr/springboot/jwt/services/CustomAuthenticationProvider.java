@@ -31,8 +31,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername(username);
+        
+        if(userDetails==null) {
+        	throw new BadCredentialsException("Incorrect username or password");
+        }
 
-        if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
         	if (!userDetails.isEnabled()) {
                 throw new DisabledException("Your account is disabled contact RH Admin");
             }
