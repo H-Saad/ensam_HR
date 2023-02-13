@@ -1,9 +1,9 @@
-db_fullname,string,Nom et prénom,false
-db_numTel,string,Tel,false
-db_email,string,Email,false
-obj_abs,string,Objet de l’absence,true
-deb_abs,date,Date de début,true
-fin_abs,date,Date de fin,true
-ens_rat,text,Enseignement à rattraper,true
-date_rat,date,Dates des rattrapages,true
-db_currDate,date,Current Date,false
+db_fullname,string,Nom et prénom,FALSE
+db_numTel,string,Tel,FALSE
+db_email,string,Email,FALSE
+_COobj_abs,string,Objet de l’absence,TRUE
+deb_abs,date,Date de début,TRUE
+fin_abs,date,Date de fin,TRUE
+ens_rat,text,Enseignement à rattraper,TRUE
+date_rat,date,Dates des rattrapages,TRUE
+db_currDate,date,Current Date,FALSE

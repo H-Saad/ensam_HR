@@ -14,6 +14,7 @@ public class Completed_request implements Request{
 	private int id;
 	private int user_id;
 	private int document_id;
+	private String doc_title;
 	private LocalDateTime datetime;
 	private boolean approved_by_l3;
 	private boolean approved_by_l2;
@@ -31,14 +32,15 @@ public class Completed_request implements Request{
 		this.final_file = "";
 	}
 
-	public Completed_request(int id, int user_id, int document_id, LocalDateTime datetime, boolean approved_by_l3,
-			boolean approved_by_l2, boolean approved_by_l1, LocalDateTime l3_datetime, LocalDateTime l2_datetime,
-			LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id, String final_file,
+	public Completed_request(int id, int user_id, int document_id, String doc_title, LocalDateTime datetime,
+			boolean approved_by_l3, boolean approved_by_l2, boolean approved_by_l1, LocalDateTime l3_datetime,
+			LocalDateTime l2_datetime, LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id, String final_file,
 			LocalDateTime completion_date) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
 		this.document_id = document_id;
+		this.doc_title = doc_title;
 		this.datetime = datetime;
 		this.approved_by_l3 = approved_by_l3;
 		this.approved_by_l2 = approved_by_l2;
@@ -201,5 +203,13 @@ public class Completed_request implements Request{
 
 	public void setCompletion_date(LocalDateTime completion_date) {
 		this.completion_date = completion_date;
+	}
+
+	public String getDoc_title() {
+		return doc_title;
+	}
+
+	public void setDoc_title(String doc_title) {
+		this.doc_title = doc_title;
 	}
 }

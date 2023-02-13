@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 import javax.persistence.JoinColumn;
 
 import com.hr.springboot.userData_module.models.Role;
@@ -44,13 +45,16 @@ public class Document {
 	)
 	private Set<Type_personnel> allowed_personnel;
 	private boolean showable;
+	@Transient
+	private String co_title;
 	
 	public Document() {
 		this.showable = true;
+		this.co_title = "";
 	}
 
 	public Document(int id, String title, Set<Role> allowed_roles, boolean needs_form, boolean requires_approval,
-			Set<Type_personnel> allowed_personnel, boolean showable) {
+			Set<Type_personnel> allowed_personnel, boolean showable, String co_title) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -59,6 +63,7 @@ public class Document {
 		this.requires_approval = requires_approval;
 		this.allowed_personnel = allowed_personnel;
 		this.showable = showable;
+		this.co_title = co_title;
 	}
 
 	public int getId() {
@@ -121,5 +126,13 @@ public class Document {
 
 	public void setShowable(boolean showable) {
 		this.showable = showable;
+	}
+
+	public String getCo_title() {
+		return co_title;
+	}
+
+	public void setCo_title(String co_title) {
+		this.co_title = co_title;
 	}
 }

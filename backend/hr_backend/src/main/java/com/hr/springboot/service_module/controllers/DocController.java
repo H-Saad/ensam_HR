@@ -116,7 +116,7 @@ public class DocController {
 		}
 		if(!d.isNeeds_form()) {
 			System.out.println("Needs form: "+d.isNeeds_form());
-			filename = ds.generate_doc(u, d, ds.getDbMappings(u, d));
+			filename = ds.generate_doc(u, d, ds.getDbMappings(u, d)).get(0);
 			System.out.println(ds.getDbMappings(u, d));
 			Request r = vs.createRequest(u, d, filename);
 			System.out.println(d.isRequires_approval());
@@ -141,8 +141,9 @@ public class DocController {
 			}
 			mappings.putAll(temp);
 			mappings.putAll(ds.getDbMappings(u, d));
-			filename = ds.generate_doc(u ,d, mappings);
-			Request r = vs.createRequest(u, d, filename);
+			ArrayList<String> yes = ds.generate_doc(u ,d, mappings);
+			filename = yes.get(0);
+			Request r = vs.createRequest(u, d, filename, yes.get(1));
 			System.out.println(d.isRequires_approval());
 			if(d.isRequires_approval()) {
 				//notify user that his request has been created

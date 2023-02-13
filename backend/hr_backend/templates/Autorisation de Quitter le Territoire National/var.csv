@@ -8,7 +8,7 @@ db_fctE,string,Fonction exercÃ©e,FALSE
 date_dep,date,Date de depart,TRUE
 date_ret,date,Date d'arrivÃ©e,TRUE
 db_currDate,date,Current date,FALSE
-motif,list1,Motif,TRUE
+_COmotif,list1,Motif,TRUE
 séminaire,choice1,,TRUE
 conférence,choice1,,TRUE
 thèse,choice1,,TRUE

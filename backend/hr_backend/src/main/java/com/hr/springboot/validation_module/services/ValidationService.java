@@ -47,9 +47,22 @@ public class ValidationService {
 		p.setDocument_id(d.getId());
 		p.setDatetime(LocalDateTime.now());
 		p.setUser_file(filename);
+		p.setDoc_title(d.getTitle());
 		pr.save(p);
 		return p;
 	}
+	
+	public Request createRequest(User u, Document d, String filename, String coTitle) {
+		Pending_request p = new Pending_request();
+		p.setUser_id(u.getId());
+		p.setDocument_id(d.getId());
+		p.setDatetime(LocalDateTime.now());
+		p.setUser_file(filename);
+		p.setDoc_title(d.getTitle() +": "+coTitle);
+		pr.save(p);
+		return p;
+	}
+	
 	
 	public void validatel1(Pending_request p, User u, String filename) {
 		p.setApproved_by_l1(true);

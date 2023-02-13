@@ -1,10 +1,10 @@
-db_fullname,string,Nom et prenom du demandeur,false
-db_grade,string,Grade,false
-db_fctE,string,Fonction,false
-db_ppr,string,DRPP,false
-destination,string,Destination,true
-date_dep,date,Date de depart,true
-date_ret,date,Date de retour,true
-moy_tra,string,Moyen de transport,true
-objet_mis,string,Objet de la mission,true
-frais,string,Frais supportés par,true
+db_fullname,string,Nom et prenom du demandeur,FALSE
+db_grade,string,Grade,FALSE
+db_fctE,string,Fonction,FALSE
+db_ppr,string,DRPP,FALSE
+destination,string,Destination,TRUE
+date_dep,date,Date de depart,TRUE
+date_ret,date,Date de retour,TRUE
+moy_tra,string,Moyen de transport,TRUE
+_COobjet_mis,string,Objet de la mission,TRUE
+frais,string,Frais supportés par,TRUE

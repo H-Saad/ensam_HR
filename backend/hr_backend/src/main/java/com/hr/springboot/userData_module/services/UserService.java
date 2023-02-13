@@ -35,7 +35,7 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	public static final int max_attempts = 5;
+	public static final int max_attempts = 3;
 	
 	public void initRoleUser() {
 		Type_personnel t1 = new Type_personnel();

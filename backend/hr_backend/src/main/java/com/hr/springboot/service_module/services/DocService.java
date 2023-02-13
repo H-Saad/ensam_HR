@@ -295,7 +295,7 @@ public class DocService {
 
 	  }
 	  
-	  public String generate_doc(User u,Document d, HashMap<String, String> mappings) throws Exception {
+	  public ArrayList<String> generate_doc(User u,Document d, HashMap<String, String> mappings) throws Exception {
 		  	org.docx4j.wml.ObjectFactory foo = Context.getWmlObjectFactory();
 
 			// Input docx has variables in it: ${colour}, ${icecream}
@@ -327,9 +327,16 @@ public class DocService {
             Docx4J.toPDF(wordMLPackage,os);
             os.flush();
             os.close();*/
-          
+			ArrayList<String> ret = new ArrayList<String>();
+			ret.add(filename);
 			System.out.println(mappings);
-			return filename;
+			for(String key:mappings.keySet()) {
+				if(key.contains("_CO")) {
+					ret.add(mappings.get(key));
+					break;
+				}
+			}
+			return ret;
 	  }
 	  
 	  public ArrayList<HashMap<String,String>> getFillableVars(Document d) throws CsvValidationException, IOException{
