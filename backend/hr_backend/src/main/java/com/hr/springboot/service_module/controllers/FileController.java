@@ -41,6 +41,9 @@ public class FileController {
     public ResponseEntity<String> uploadFiles(@RequestParam("files")MultipartFile multipartFile) throws IOException {
 
         String filename = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        if(!filename.toLowerCase().contains(".docx")||!filename.toLowerCase().contains(".pdf")||!filename.toLowerCase().contains(".png")||!filename.toLowerCase().contains("jpg")||!filename.toLowerCase().contains("jpeg")) {
+			return ResponseEntity.status(401).body("");
+		}
         Path fileStorage = get(UPLOADDIR, filename).toAbsolutePath().normalize();
         copy(multipartFile.getInputStream(), fileStorage, REPLACE_EXISTING);
         
@@ -50,7 +53,11 @@ public class FileController {
 	@PreAuthorize("hasRole('User')" + "|| hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
     @GetMapping("download/{filename}")
     public ResponseEntity<Resource> downloadFiles(@PathVariable("filename") String filename) throws IOException {
+		if(filename.contains("..") || filename.contains("/") || filename.contains("\\")) {
+			return ResponseEntity.status(401).body(null);
+		}
         Path filePath = get(DOWNDIR).toAbsolutePath().normalize().resolve(filename);
+        System.out.println(filePath);
         if(!Files.exists(filePath)) {
             throw new FileNotFoundException(filename + " was not found on the server");
         }

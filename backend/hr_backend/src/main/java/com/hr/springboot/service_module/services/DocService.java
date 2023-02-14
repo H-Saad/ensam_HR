@@ -70,6 +70,8 @@ public class DocService {
 	@Autowired
 	TypeRepo tr;
 	
+	private final String secret="why_me";
+	
 	public String input_to_var(User u, String input) {
 		
 		User director = ur.findByRole(CONSTS.L1_ROLE).get();
@@ -491,7 +493,7 @@ public class DocService {
 	  }
 	  
 	  public String generateUniqueFileName(User u, Document d) {
-		  return encryptThisString(u.getNom()+"_"+u.getPrenom()+"_"+d.getTitle()+"_"+LocalDateTime.now().toString());
+		  return encryptThisString(u.getNom()+"_"+u.getPrenom()+"_"+d.getTitle()+"_"+LocalDateTime.now().toString()+secret);
 	  }
 	  
 	  public String encryptThisString(String input)
