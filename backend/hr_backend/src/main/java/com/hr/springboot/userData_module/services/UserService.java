@@ -1,27 +1,59 @@
 package com.hr.springboot.userData_module.services;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.json.CDL;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hr.springboot.config.CONSTS;
+import com.hr.springboot.service_module.models.Var;
+import com.hr.springboot.service_module.services.DocService;
 import com.hr.springboot.userData_module.models.Role;
 import com.hr.springboot.userData_module.models.Type_personnel;
 import com.hr.springboot.userData_module.models.User;
 import com.hr.springboot.userData_module.repositories.RoleRepo;
 import com.hr.springboot.userData_module.repositories.TypeRepo;
 import com.hr.springboot.userData_module.repositories.UserRepo;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvException;
+import com.opencsv.exceptions.CsvValidationException;
 
 @Service
 @Transactional
 public class UserService {
+	
+	@Autowired
+	private DocService ds;
 
 	@Autowired
 	private RoleRepo rr;
@@ -237,13 +269,143 @@ public class UserService {
 		 ur.save(u);
 	 }
 	 
-	 //tobeimplemented
-	 public void importUsersCSV() {
-		 
+	 public void importByCIN(String filename) throws IOException, CsvException {
+		 this.normalizeCsvTitles(filename);
+		 InputStream inputStream = new FileInputStream(System.getProperty("user.dir")+CONSTS.DOC_DIR+"/"+filename);
+	     String csvAsString = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+	     JSONArray json = CDL.toJSONArray(csvAsString);
+	     inputStream.close();
+	     Role r = rr.findById("User").get();
+	     HashSet<Role> hs = new HashSet<Role>();
+	     hs.add(r);
+	     for(int i=0;i<json.length(); i++) {
+	    	 JSONObject temp = json.getJSONObject(i);
+	    	 if(ur.findUserByCin(temp.getString("cin")).isEmpty()) {
+				User u = new User();
+				u.setEmail(temp.getString("email"));
+				u.setCin(temp.getString("cin"));
+				u.setRole(hs);
+				ur.save(u);
+				
+			}else {
+				System.out.println("collision escaping...");
+			}
+	     }
+	     File myObj = new File(System.getProperty("user.dir")+CONSTS.DOC_DIR+"/"+filename); 
+	     if (myObj.delete()) { 
+	       System.out.println("Deleted the file: " + myObj.getName());
+	     } else {
+	       System.out.println("Failed to delete the file.");
+	     } 
+	 }
+	 
+	 public void mergeCinwData(String filename) throws IOException, NumberFormatException, CsvException {
+		 this.normalizeCsvTitles(filename);
+		 InputStream inputStream = new FileInputStream(System.getProperty("user.dir")+CONSTS.DOC_DIR+"/"+filename);
+	     String csvAsString = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+	     JSONArray json = CDL.toJSONArray(csvAsString);
+	     inputStream.close();
+	     for(int i=0;i<json.length(); i++) {
+	    	 JSONObject temp = json.getJSONObject(i);
+	    	 if(ur.findUserByCin(temp.getString("cin")).isPresent()) {
+	    		 try {
+	    			 String password = this.generateRandomPassword();
+	    			 System.out.println(password);
+					 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					 User u1 = ur.findUserByCin(temp.getString("cin")).get();
+					 u1.setCode_etablissement(Integer.parseInt(temp.getString("code_etablissement")));
+					 u1.setCode_annee(Integer.parseInt(temp.getString("code_annee")));
+					 u1.setPpr(Integer.parseInt(temp.getString("ppr")));
+					 u1.setNom(temp.getString("nom"));
+					 u1.setPrenom(temp.getString("prenom"));
+					 u1.setGenre(this.normalizeString(temp.getString("genre")));
+					 u1.setDate_naissance(LocalDate.parse(temp.getString("date_naissance"),formatter));
+					 u1.setLieu_naissance(temp.getString("lieu de naissance"));
+					 u1.setCode_nationalite(temp.getString("code_nationalite"));
+					 u1.setCode_grade(Integer.parseInt(temp.getString("code_grade")));
+					 if(this.normalizeString(temp.getString("type_personnel")).equals("enseignant")) {
+						 Type_personnel t = tr.findById("Enseignant").get();
+						 Set<Type_personnel> s = new HashSet<Type_personnel>();
+						 s.add(t);
+						 u1.setType_personnel(s);
+					}else {
+						Type_personnel t = tr.findById("Administratif").get();
+						Set<Type_personnel> s = new HashSet<Type_personnel>();
+						s.add(t);
+						u1.setType_personnel(s);
+					}	
+					u1.setDate_recrutement(LocalDate.parse(temp.getString("date_recrutement"),formatter));
+					u1.setDate_affectation_MESRSFC(LocalDate.parse(temp.getString("date_affectation_mesrsfc"),formatter));
+					u1.setDate_affectation_enseignement(LocalDate.parse(temp.getString("date_affectation_enseignement"),formatter));
+					u1.setCode_departement(Integer.parseInt(temp.getString("code_departement")));
+					u1.setNombre_diplomes(Integer.parseInt(temp.getString("nombre de diplome")));
+					u1.setDiplome(temp.getString("diplome"));
+					u1.setSpecialite(temp.getString("specialite"));
+					u1.setUniv_etablissement_diplomate(temp.getString("universite_etablissement_diplomante"));
+					u1.setFonction_exerce(temp.getString("fonction_exercee"));
+					u1.setService_affectation(temp.getString("service_affectation"));
+					u1.setGrade(temp.getString("grade"));
+					u1.setDate_effet_grade(LocalDate.parse(temp.getString("date_effet_grade"),formatter));
+					u1.setEchelon(temp.getString("echelon"));
+					u1.setDate_effet_echelon(LocalDate.parse(temp.getString("date_effet_echelon"),formatter));
+					Set<Role> srr = new HashSet<Role>();
+					srr.add(rr.findById("User").get());
+					u1.setRole(srr);
+					u1.setNum_tel(temp.getString("num_tel"));
+					u1.setDisabled(false);
+					u1.setPassword(getEncodedPassword(password));
+					ur.save(u1);
+					System.out.println("Email: "+u1.getEmail());
+					System.out.println("Password: "+u1.getPassword()); 
+	    		 }catch(Exception e) {
+	    		 System.out.println("Escaped: "+temp.getString("nom")+" "+temp.getString("prenom"));
+	    		 }
+	    		 
+			 }else {
+				 System.out.println("user non existing escaping...");
+			 }
+	     }
+	     File myObj = new File(System.getProperty("user.dir")+CONSTS.DOC_DIR+"/"+filename); 
+	     if (myObj.delete()) { 
+	       System.out.println("Deleted the file: " + myObj.getName());
+	     } else {
+	       System.out.println("Failed to delete the file.");
+	     } 
+	 }
+	 
+	 private void normalizeCsvTitles(String filename) throws IOException, CsvException {
+		File inputFile = new File(System.getProperty("user.dir")+CONSTS.DOC_DIR+"/"+filename);
+		// Read existing file 
+		CSVReader reader = new CSVReader(new FileReader(inputFile));
+		List<String[]> csvBody = reader.readAll();
+		// get CSV row column  and replace with by using row and column
+		for(int i=0;i<csvBody.get(0).length;i++) {
+			csvBody.get(0)[i] = this.normalizeString(csvBody.get(0)[i]);
+		}
+		reader.close();
+		CSVWriter writer = new CSVWriter(new FileWriter(inputFile));
+		writer.writeAll(csvBody);
+		writer.flush();
+		writer.close();
+	 }
+	 
+	 private String normalizeString(String s) {
+		 s = s.toLowerCase();
+		 s = Normalizer.normalize(s, Form.NFD);
+		 s = s.replaceAll("\\p{M}", "");
+		 s = s.trim();
+		 return s;
+	 }
+	 
+	 public String generateRandomPassword() {
+		 byte[] array = new byte[8]; // length is bounded by 7
+		 new Random().nextBytes(array);
+		 String generatedString = new String(array, Charset.forName("UTF-8"));
+		 return ds.encryptThisString(generatedString+LocalDateTime.now().toString());
 	 }
 	 
 	 //tobeimplemented
-	 public void exportUserCSV() {
+	 public void importUsersCSV() {
 		 
 	 }
 }

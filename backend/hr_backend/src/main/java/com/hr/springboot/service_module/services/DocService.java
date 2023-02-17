@@ -446,7 +446,7 @@ public class DocService {
 		  d.setAllowed_roles(r);
 		  d.setNeeds_form(true);
 		  d.setRequires_approval(true);
-		  d.setAllowed_personnel(t3);
+		  d.setAllowed_personnel(t2);
 		  dr.save(d);
 		  
 		  e.setTitle("Situation Administrative");

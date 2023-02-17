@@ -28,6 +28,7 @@ import com.hr.springboot.userData_module.models.User;
 import com.hr.springboot.userData_module.repositories.RoleRepo;
 import com.hr.springboot.userData_module.repositories.TypeRepo;
 import com.hr.springboot.userData_module.repositories.UserRepo;
+import com.hr.springboot.userData_module.services.UserService;
 
 @CrossOrigin
 @RestController
@@ -50,6 +51,9 @@ public class AdminCRUDcontroller {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private UserService us;
+	
 	/*
 	 * "genre":"M" OR "F"
 	 * "type_personnel":"E" OR "A"
@@ -67,7 +71,7 @@ public class AdminCRUDcontroller {
 		u1.setPrenom(req.get("prenom"));
 		u1.setNum_tel(req.get("num_tel"));
 		if(req.get("genre").toUpperCase().equals("M")) {
-			u1.setGenre("masculim");
+			u1.setGenre("masculin");
 		}else {
 			u1.setGenre("feminin");
 		}
@@ -209,10 +213,11 @@ public class AdminCRUDcontroller {
 	}
 	
 	@PreAuthorize("hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
-	@GetMapping("delete/{id}")
-	public ResponseEntity<HashMap<String,String>> delete(@PathVariable int id){
+	@GetMapping("delete/{id}/{motif}")
+	public ResponseEntity<HashMap<String,String>> delete(@PathVariable int id, @PathVariable String motif){
 		User u = ur.findById(id).get();
 		u.setDisabled(true);
+		u.setDisable_cause(motif);
 		ur.save(u);
 		HashMap<String,String> h = new HashMap<String,String>();
 		h.put("status", "success");
@@ -246,5 +251,31 @@ public class AdminCRUDcontroller {
 		u.setDisabled(false);
 		ret.put("status", "success");
 		return ResponseEntity.status(200).body(ret);
+	}
+	
+	@PreAuthorize("hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
+	@PostMapping("import_mails")
+	public ResponseEntity<String> importMails(@RequestBody HashMap<String,String> req){
+		String filename = req.get("filename");
+		try {
+			us.importByCIN(filename);
+			return ResponseEntity.status(200).body("ok");
+		}
+		catch(Exception e) {
+			return ResponseEntity.status(400).body("bad csv file");
+		}
+	}
+	
+	@PreAuthorize("hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
+	@PostMapping("import_users")
+	public ResponseEntity<String> importUsers(@RequestBody HashMap<String,String> req){
+		String filename = req.get("filename");
+		try {
+			us.mergeCinwData(filename);
+			return ResponseEntity.status(200).body("ok");
+		}
+		catch(Exception e) {
+			return ResponseEntity.status(400).body("bad csv file");
+		}
 	}
 }

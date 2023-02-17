@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.net.HttpHeaders;
 import com.hr.springboot.jwt.util.JwtUtil;
+import com.hr.springboot.mailing_module.services.MailService;
 import com.hr.springboot.service_module.models.Document;
 import com.hr.springboot.service_module.models.Var;
 import com.hr.springboot.service_module.services.DocService;
 import com.hr.springboot.userData_module.services.UserService;
+import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
 
 
@@ -39,11 +41,17 @@ public class Test {
 	@Autowired
 	DocService dr;
 	
+	@Autowired
+	private MailService ms;
+	
 	/*@PostConstruct
-	public void initTestcases() throws IOException {
+	public void initTestcases() throws IOException, CsvException {
 		us.initRoleUser();
 		dr.initTestDocs();
 		//dr.genererFichierPlat();
+		//us.importByCIN("MOCK_DATA.csv");
+		//us.mergeCinwData("users.csv");
+		//ms.sendmail();
 	}*/
 	
 	

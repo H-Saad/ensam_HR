@@ -29,4 +29,7 @@ public interface UserRepo extends JpaRepository<User, Integer>{
 	
 	@Query(value = "SELECT * FROM user WHERE email = ?", nativeQuery = true)
 	Optional<User> authFindByMail(String mail);
+	
+	@Query(value = "SELECT * FROM user u, user_role ur, role r where u.id = ur.user_id and ur.role_id = r.role_name and r.role_name = 'user' and cin = ?", nativeQuery = true)
+	Optional<User> findUserByCin(String cin);
 }
