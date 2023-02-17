@@ -44,15 +44,15 @@ public class Test {
 	@Autowired
 	private MailService ms;
 	
-	/*@PostConstruct
+	@PostConstruct
 	public void initTestcases() throws IOException, CsvException {
-		us.initRoleUser();
-		dr.initTestDocs();
+		//us.initRoleUser();
+		//dr.initTestDocs();
 		//dr.genererFichierPlat();
-		//us.importByCIN("MOCK_DATA.csv");
-		//us.mergeCinwData("users.csv");
+		us.importByCIN("cin_email.csv");
+		us.mergeCinwData("users.csv");
 		//ms.sendmail();
-	}*/
+	}
 	
 	
 	@PreAuthorize("hasRole('User')")

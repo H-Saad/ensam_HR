@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -35,6 +36,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hr.springboot.config.CONSTS;
+import com.hr.springboot.mailing_module.services.MailDict;
+import com.hr.springboot.mailing_module.services.MailService;
 import com.hr.springboot.service_module.models.Var;
 import com.hr.springboot.service_module.services.DocService;
 import com.hr.springboot.userData_module.models.Role;
@@ -66,6 +69,12 @@ public class UserService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private MailDict md;
+	
+	@Autowired
+	private MailService ms;
 	
 	public static final int max_attempts = 3;
 	
@@ -261,6 +270,7 @@ public class UserService {
 		 u.setLocked(true);
 		 u.setLoginAttempts(0);
 		 ur.save(u);
+		 ms.sendmail(u, md.accLocked(u));
 	 }
 	 
 	 public void resetAttempts(String email) {
@@ -305,10 +315,12 @@ public class UserService {
 	     String csvAsString = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
 	     JSONArray json = CDL.toJSONArray(csvAsString);
 	     inputStream.close();
+	     ArrayList<HashMap<String,Object>> mails = new ArrayList<HashMap<String,Object>>();
 	     for(int i=0;i<json.length(); i++) {
 	    	 JSONObject temp = json.getJSONObject(i);
 	    	 if(ur.findUserByCin(temp.getString("cin")).isPresent()) {
 	    		 try {
+	    			 HashMap<String,Object> hm = new HashMap<String,Object>();
 	    			 String password = this.generateRandomPassword();
 	    			 System.out.println(password);
 					 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -356,15 +368,27 @@ public class UserService {
 					u1.setPassword(getEncodedPassword(password));
 					ur.save(u1);
 					System.out.println("Email: "+u1.getEmail());
-					System.out.println("Password: "+u1.getPassword()); 
+					System.out.println("Password: "+u1.getPassword());
+					
+					HashMap<String,String> h = md.accCreated(u1, password);
+					
+					hm.put("user", u1);
+					hm.put("objet", h.get("objet"));
+					hm.put("body", h.get("body"));
+					
+					mails.add(hm);
 	    		 }catch(Exception e) {
-	    		 System.out.println("Escaped: "+temp.getString("nom")+" "+temp.getString("prenom"));
+	    			 e.printStackTrace();
+	    			 System.out.println("Escaped: "+temp.getString("nom")+" "+temp.getString("prenom"));
 	    		 }
 	    		 
 			 }else {
 				 System.out.println("user non existing escaping...");
 			 }
 	     }
+	     
+	     ms.sendMultiple(mails);
+	     
 	     File myObj = new File(System.getProperty("user.dir")+CONSTS.DOC_DIR+"/"+filename); 
 	     if (myObj.delete()) { 
 	       System.out.println("Deleted the file: " + myObj.getName());
@@ -402,10 +426,5 @@ public class UserService {
 		 new Random().nextBytes(array);
 		 String generatedString = new String(array, Charset.forName("UTF-8"));
 		 return ds.encryptThisString(generatedString+LocalDateTime.now().toString());
-	 }
-	 
-	 //tobeimplemented
-	 public void importUsersCSV() {
-		 
 	 }
 }

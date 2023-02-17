@@ -83,6 +83,7 @@ public class Refused_request implements Request{
 		this.l2_file = p.getL2_file();
 		this.l3_file = p.getL3_file();
 		this.user_file = p.getUser_file();
+		this.doc_title = p.getDoc_title();
 	}
 
 	public int getId() {

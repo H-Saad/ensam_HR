@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hr.springboot.mailing_module.services.MailDict;
+import com.hr.springboot.mailing_module.services.MailService;
 import com.hr.springboot.notification_module.services.NotifDict;
 import com.hr.springboot.notification_module.services.NotifService;
 import com.hr.springboot.service_module.models.Document;
@@ -40,6 +42,12 @@ public class ValidationService {
 	@Autowired
 	UserRepo ur;
 	
+	@Autowired
+	MailService ms;
+	
+	@Autowired
+	MailDict md;
+	
 	
 	public Request createRequest(User u, Document d, String filename) {
 		Pending_request p = new Pending_request();
@@ -49,6 +57,10 @@ public class ValidationService {
 		p.setUser_file(filename);
 		p.setDoc_title(d.getTitle());
 		pr.save(p);
+		
+		ms.sendmail(u, md.requestCreated(u, p));
+		ms.sendmail(ur.findByRole("layer3").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());
+		
 		return p;
 	}
 	
@@ -60,6 +72,10 @@ public class ValidationService {
 		p.setUser_file(filename);
 		p.setDoc_title(d.getTitle() +": "+coTitle);
 		pr.save(p);
+		
+		ms.sendmail(u, md.requestCreated(u, p));
+		ms.sendmail(ur.findByRole("layer3").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());
+		
 		return p;
 	}
 	
@@ -78,6 +94,8 @@ public class ValidationService {
 		p.setL2_datetime(LocalDateTime.now());
 		p.setL2_file(filename);
 		pr.save(p);
+		
+		ms.sendmail(ur.findByRole("layer1").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());
 	}
 	
 	public void validatel3(Pending_request p, User u, String filename) {
@@ -86,6 +104,9 @@ public class ValidationService {
 		p.setL3_datetime(LocalDateTime.now());
 		p.setL3_file(filename);
 		pr.save(p);
+		
+		ms.sendmail(ur.findByRole("layer2").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());
+		
 		//notifier l'utilisateur que sa requete est approuve
 		//ns.makeNotif(u, ur.findById(p.getUser_id()).get(), p, nd.approvedBy(u, p));
 	}
@@ -109,6 +130,7 @@ public class ValidationService {
 		}
 		cr.save(c);
 		ns.makeNotif(ur.findById(p.getUser_id()).get(), ur.findById(p.getUser_id()).get(), c, nd.complete(c));
+		ms.sendmail(ur.findById(c.getUser_id()).get(), md.docRdy(ur.findById(c.getUser_id()).get(), c), c.getFinal_file());
 	}
 	
 	public void refuseRequest(Pending_request p, User u, String refusal_msg) {
@@ -120,6 +142,7 @@ public class ValidationService {
 		rr.save(rf);
 		//notifier l utilisateur que sa requete est refuse
 		ns.makeNotif(u, ur.findById(p.getUser_id()).get(), rf, nd.refusedBy(u, p));
+		ms.sendmail((ur.findById(rf.getUser_id()).get()), md.requestRefused(ur.findById(rf.getUser_id()).get(), rf));
 	}
 	
 	public List<Pending_request> getUserPending(User u){

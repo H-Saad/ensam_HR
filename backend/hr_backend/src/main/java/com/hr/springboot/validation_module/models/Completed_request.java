@@ -78,6 +78,7 @@ public class Completed_request implements Request{
 				}
 			}
 		}
+		this.doc_title = p.getDoc_title();
 	}
 
 	public int getId() {
