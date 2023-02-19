@@ -19,6 +19,7 @@ import com.google.common.net.HttpHeaders;
 import com.hr.springboot.jwt.util.JwtUtil;
 import com.hr.springboot.userData_module.models.User;
 import com.hr.springboot.userData_module.repositories.UserRepo;
+import com.hr.springboot.userData_module.services.UserService;
 
 @CrossOrigin
 @RestController
@@ -82,8 +83,9 @@ public class UserController {
 	@PostMapping("chpass")
 	public ResponseEntity<String> chpass(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,String> req){
 		User u = util.getUserfromToken(auth);
-		if(passwordEncoder.encode(req.get("old")).equals(u.getPassword())) {
+		if(passwordEncoder.matches(req.get("old"), u.getPassword())) {
 			u.setPassword(passwordEncoder.encode(req.get("new")));
+			ur.save(u);
 			return ResponseEntity.status(200).body("ok");
 		}
 		return ResponseEntity.status(401).body("wrong password");

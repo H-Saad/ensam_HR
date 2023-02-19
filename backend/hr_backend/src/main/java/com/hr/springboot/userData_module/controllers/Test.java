@@ -49,8 +49,8 @@ public class Test {
 		//us.initRoleUser();
 		//dr.initTestDocs();
 		//dr.genererFichierPlat();
-		us.importByCIN("cin_email.csv");
-		us.mergeCinwData("users.csv");
+		//us.importByCIN("cin_email.csv");
+		//us.mergeCinwData("users.csv");
 		//ms.sendmail();
 	}
 	
