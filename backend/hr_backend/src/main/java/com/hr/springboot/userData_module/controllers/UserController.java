@@ -81,13 +81,19 @@ public class UserController {
 	
 	@PreAuthorize("hasRole('User')" + "|| hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
 	@PostMapping("chpass")
-	public ResponseEntity<String> chpass(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,String> req){
+	public ResponseEntity<HashMap<String,String>> chpass(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,String> req){
 		User u = util.getUserfromToken(auth);
+		HashMap<String,String> resp = new HashMap<String,String>();
+		System.out.println(req.get("old"));
+		System.out.println(req.get("new"));
+		System.out.println(passwordEncoder.matches(req.get("old"), u.getPassword()));
 		if(passwordEncoder.matches(req.get("old"), u.getPassword())) {
 			u.setPassword(passwordEncoder.encode(req.get("new")));
 			ur.save(u);
-			return ResponseEntity.status(200).body("ok");
+			resp.put("status", "ok");
+			return ResponseEntity.status(200).body(resp);
 		}
-		return ResponseEntity.status(401).body("wrong password");
+		resp.put("status", "wrong password");
+		return ResponseEntity.status(400).body(resp);
 	}
 }

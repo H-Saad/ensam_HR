@@ -41,10 +41,7 @@ public class FileController {
     public ResponseEntity<String> uploadFiles(@RequestParam("files")MultipartFile multipartFile) throws IOException {
 
         String filename = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        if(!filename.toLowerCase().contains(".docx")||!filename.toLowerCase().contains(".pdf")||!filename.toLowerCase().contains(".png")||!filename.toLowerCase().contains("jpg")||!filename.toLowerCase().contains("jpeg")) {
-			return ResponseEntity.status(401).body("");
-		}
-        Path fileStorage = get(UPLOADDIR, filename).toAbsolutePath().normalize();
+        Path fileStorage = get(DOWNDIR, filename).toAbsolutePath().normalize();
         copy(multipartFile.getInputStream(), fileStorage, REPLACE_EXISTING);
         
         return ResponseEntity.ok().body(filename);

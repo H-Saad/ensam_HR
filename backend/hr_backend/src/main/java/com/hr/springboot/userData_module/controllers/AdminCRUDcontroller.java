@@ -62,6 +62,7 @@ public class AdminCRUDcontroller {
 	@Autowired
 	private MailDict md;
 	
+	
 	/*
 	 * "genre":"M" OR "F"
 	 * "type_personnel":"E" OR "A"
@@ -150,8 +151,9 @@ public class AdminCRUDcontroller {
 	public ResponseEntity<List<User>> getAll(){
 		List<User> ret = new ArrayList<User>();
 		List<User> req = ur.findAll();
+		Role r = rr.findById("User").get();
 		for(User u:req) {
-			if(!u.isDisabled()) {
+			if(!u.isDisabled() && u.getRole().contains(r)) {
 				u.setPassword("");
 				ret.add(u);
 			}
@@ -273,6 +275,7 @@ public class AdminCRUDcontroller {
 			return ResponseEntity.status(200).body("ok");
 		}
 		catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(400).body("bad csv file");
 		}
 	}
@@ -286,6 +289,7 @@ public class AdminCRUDcontroller {
 			return ResponseEntity.status(200).body("ok");
 		}
 		catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(400).body("bad csv file");
 		}
 	}
