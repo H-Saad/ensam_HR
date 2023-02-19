@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hr.springboot.mailing_module.services.MailDict;
+import com.hr.springboot.mailing_module.services.MailService;
 import com.hr.springboot.service_module.services.DocService;
 import com.hr.springboot.userData_module.models.Role;
 import com.hr.springboot.userData_module.models.Type_personnel;
@@ -53,6 +55,12 @@ public class AdminCRUDcontroller {
 	
 	@Autowired
 	private UserService us;
+	
+	@Autowired
+	private MailService ms;
+	
+	@Autowired
+	private MailDict md;
 	
 	/*
 	 * "genre":"M" OR "F"
@@ -109,6 +117,7 @@ public class AdminCRUDcontroller {
 		u1.setDate_effet_grade(LocalDate.parse(req.get("date_effet_grade")));
 		u1.setEchelon(req.get("echelon"));
 		u1.setDate_effet_echelon(LocalDate.parse(req.get("date_effet_echelon")));
+		u1.setAdresse(req.get("adresse"));
 		
 		Set<Role> srr = new HashSet<Role>();
 		srr.add(rr.findById("User").get());
@@ -121,6 +130,8 @@ public class AdminCRUDcontroller {
 		u1.setPassword(passwordEncoder.encode(password));
 		
 		ur.save(u1);
+		
+		ms.sendmail(u1, md.accCreated(u1, password));
 		
 		HashMap<String,String> ret = new HashMap<String,String>();
 		ret.put("Password", password);

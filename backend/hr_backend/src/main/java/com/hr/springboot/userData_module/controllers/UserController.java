@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,9 @@ public class UserController {
 	
 	@Autowired
 	private UserRepo ur;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	JwtUtil util;
@@ -64,5 +68,24 @@ public class UserController {
 		u.setAR_prenom(req.get("prenom"));
 		ur.save(u);
 		return ResponseEntity.status(200).body("yes");
+	}
+	
+	/*
+	 * request json:
+	 * {
+	 * 		"old":old,
+	 * 		"new":new
+	 * }
+	 */
+	
+	@PreAuthorize("hasRole('User')" + "|| hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
+	@PostMapping("chpass")
+	public ResponseEntity<String> chpass(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth, @RequestBody HashMap<String,String> req){
+		User u = util.getUserfromToken(auth);
+		if(passwordEncoder.encode(req.get("old")).equals(u.getPassword())) {
+			u.setPassword(passwordEncoder.encode(req.get("new")));
+			return ResponseEntity.status(200).body("ok");
+		}
+		return ResponseEntity.status(401).body("wrong password");
 	}
 }

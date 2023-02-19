@@ -324,6 +324,7 @@ public class UserService {
 	    			 String password = this.generateRandomPassword();
 	    			 System.out.println(password);
 					 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					 DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 					 User u1 = ur.findUserByCin(temp.getString("cin")).get();
 					 u1.setCode_etablissement(Integer.parseInt(temp.getString("code_etablissement")));
 					 u1.setCode_annee(Integer.parseInt(temp.getString("code_annee")));
@@ -331,7 +332,11 @@ public class UserService {
 					 u1.setNom(temp.getString("nom"));
 					 u1.setPrenom(temp.getString("prenom"));
 					 u1.setGenre(this.normalizeString(temp.getString("genre")));
-					 u1.setDate_naissance(LocalDate.parse(temp.getString("date_naissance"),formatter));
+					 if(temp.getString("date_naissance").contains("-")) {
+						 u1.setDate_naissance(LocalDate.parse(temp.getString("date_naissance"),formatter2));
+					 }else {
+						 u1.setDate_naissance(LocalDate.parse(temp.getString("date_naissance"),formatter));
+					 }
 					 u1.setLieu_naissance(temp.getString("lieu de naissance"));
 					 u1.setCode_nationalite(temp.getString("code_nationalite"));
 					 u1.setCode_grade(Integer.parseInt(temp.getString("code_grade")));
@@ -346,9 +351,24 @@ public class UserService {
 						s.add(t);
 						u1.setType_personnel(s);
 					}	
-					u1.setDate_recrutement(LocalDate.parse(temp.getString("date_recrutement"),formatter));
-					u1.setDate_affectation_MESRSFC(LocalDate.parse(temp.getString("date_affectation_mesrsfc"),formatter));
-					u1.setDate_affectation_enseignement(LocalDate.parse(temp.getString("date_affectation_enseignement"),formatter));
+					if(temp.getString("date_recrutement").contains("-")) {
+						 u1.setDate_recrutement(LocalDate.parse(temp.getString("date_recrutement"),formatter2));
+					}else {
+						 u1.setDate_recrutement(LocalDate.parse(temp.getString("date_recrutement"),formatter));
+					}
+					
+					if(temp.getString("date_affectation_mesrsfc").contains("-")) {
+						u1.setDate_affectation_MESRSFC(LocalDate.parse(temp.getString("date_affectation_mesrsfc"),formatter2));
+					}else {
+						u1.setDate_affectation_MESRSFC(LocalDate.parse(temp.getString("date_affectation_mesrsfc"),formatter));
+					}
+					
+					if(temp.getString("date_affectation_enseignement").contains("-")) {
+						u1.setDate_affectation_enseignement(LocalDate.parse(temp.getString("date_affectation_enseignement"),formatter2));
+					}else {
+						u1.setDate_affectation_enseignement(LocalDate.parse(temp.getString("date_affectation_enseignement"),formatter));
+					}
+					
 					u1.setCode_departement(Integer.parseInt(temp.getString("code_departement")));
 					u1.setNombre_diplomes(Integer.parseInt(temp.getString("nombre de diplome")));
 					u1.setDiplome(temp.getString("diplome"));
@@ -357,15 +377,28 @@ public class UserService {
 					u1.setFonction_exerce(temp.getString("fonction_exercee"));
 					u1.setService_affectation(temp.getString("service_affectation"));
 					u1.setGrade(temp.getString("grade"));
-					u1.setDate_effet_grade(LocalDate.parse(temp.getString("date_effet_grade"),formatter));
+					
+					if(temp.getString("date_effet_grade").contains("-")) {
+						u1.setDate_effet_grade(LocalDate.parse(temp.getString("date_effet_grade"),formatter2));
+					}else {
+						u1.setDate_effet_grade(LocalDate.parse(temp.getString("date_effet_grade"),formatter));
+					}
+					
 					u1.setEchelon(temp.getString("echelon"));
-					u1.setDate_effet_echelon(LocalDate.parse(temp.getString("date_effet_echelon"),formatter));
+					
+					if(temp.getString("date_effet_echelon").contains("-")) {
+						u1.setDate_effet_echelon(LocalDate.parse(temp.getString("date_effet_echelon"),formatter2));
+					}else {
+						u1.setDate_effet_echelon(LocalDate.parse(temp.getString("date_effet_echelon"),formatter));
+					}
+					
 					Set<Role> srr = new HashSet<Role>();
 					srr.add(rr.findById("User").get());
 					u1.setRole(srr);
 					u1.setNum_tel(temp.getString("num_tel"));
 					u1.setDisabled(false);
 					u1.setPassword(getEncodedPassword(password));
+					u1.setAdresse(temp.getString("adresse"));
 					ur.save(u1);
 					System.out.println("Email: "+u1.getEmail());
 					System.out.println("Password: "+u1.getPassword());
