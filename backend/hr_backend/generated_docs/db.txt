@@ -1,0 +1,34 @@
+employee(id, name, email, pass, role,..)
+pending_request(id,source_id,datetime,type...)
+approved_request(id,source_id,supervisor_id,request_date,approval_date,type...)
+refused_request(id,source_id,supervisor_id,request_date,refusal_date,....)
+completed_request(id,source_id,supervisor_id,request_date,approval_date,completion_date,...)
+document(id,title,allowed_roles...)
+notification(id,from,to,document_id,desc,timestamp,read)
+
+
+download list of documents -> list will contain doc id and doc title and if it needs a form
+
+onclick -> if doesnt need a form contact a no form api that returns the file or a link to it 
+
+onclick -> if it needs a form contact a yes form api that returns the vars needed
+
+Fill form -> clicks on submit leads to send infos + id to server 
+
+
+After either filling the form or clicking a button talks to either form api or no form api
+checks if needs approval or not if yes sends a notification to things and pass etc then return link + approval thingy
+Else just returns link and non approval thingy
+
+
+1- user select docu 
+2- sends doc id to server
+3- if doc needs additional vars returns smth that makes frontend send another request for vars
+   if doc doesnt need additional vars it sends smth that makes frontend send another request for document
+
+case needs var:
+
+frontend needs to send request to doc api 
+
+
+wire it to requests

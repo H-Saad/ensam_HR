@@ -54,7 +54,6 @@ public class FileController {
 			return ResponseEntity.status(401).body(null);
 		}
         Path filePath = get(DOWNDIR).toAbsolutePath().normalize().resolve(filename);
-        System.out.println(filePath);
         if(!Files.exists(filePath)) {
             throw new FileNotFoundException(filename + " was not found on the server");
         }

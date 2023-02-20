@@ -268,7 +268,7 @@ public class ValidationController {
 			vs.completeRequest(p);
 			return ResponseEntity.status(200).body(new JSONObject());
 		}
-		return ResponseEntity.status(401).body(new JSONObject());
+		return ResponseEntity.status(400).body(new JSONObject());
 	}
 	
 	@PreAuthorize("hasRole('layer1')")

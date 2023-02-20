@@ -277,7 +277,7 @@ public class SUCRUDcontroller {
 			ret.put("status", "success");
 			return ResponseEntity.status(200).body(ret);
 		}
-		return ResponseEntity.status(401).body(ret);
+		return ResponseEntity.status(400).body(ret);
 	}
 	
 	@PreAuthorize("hasRole('superuser')")

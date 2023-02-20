@@ -69,6 +69,7 @@ public class DocController {
 			temp.put("id", ""+d.getId());
 			temp.put("title", d.getTitle());
 			temp.put("needs_form", Boolean.toString(d.isNeeds_form()));
+			temp.put("needs_approval", Boolean.toString(d.isRequires_approval()));
 			jl.add(temp);
 		}
 		return ResponseEntity.status(200).body(jl);
@@ -143,7 +144,12 @@ public class DocController {
 			mappings.putAll(ds.getDbMappings(u, d));
 			ArrayList<String> yes = ds.generate_doc(u ,d, mappings);
 			filename = yes.get(0);
-			Request r = vs.createRequest(u, d, filename, yes.get(1));
+			Request r;
+			if(yes.size() > 1) {
+				r = vs.createRequest(u, d, filename, yes.get(1));
+			}else {
+				r = vs.createRequest(u, d, filename);
+			}
 			System.out.println(d.isRequires_approval());
 			if(d.isRequires_approval()) {
 				//notify user that his request has been created
