@@ -56,6 +56,7 @@ public class ValidationService {
 		p.setDatetime(LocalDateTime.now());
 		p.setUser_file(filename);
 		p.setDoc_title(d.getTitle());
+		p.setCurrentfile(filename);
 		pr.save(p);
 		
 		ms.sendmail(u, md.requestCreated(u, p));
@@ -71,6 +72,7 @@ public class ValidationService {
 		p.setDatetime(LocalDateTime.now());
 		p.setUser_file(filename);
 		p.setDoc_title(d.getTitle() +": "+coTitle);
+		p.setCurrentfile(filename);
 		pr.save(p);
 		
 		ms.sendmail(u, md.requestCreated(u, p));
@@ -85,6 +87,11 @@ public class ValidationService {
 		p.setL1_id(u.getId());
 		p.setL1_datetime(LocalDateTime.now());
 		p.setL1_file(filename);
+		if(filename!=null) {
+			if(!filename.isEmpty()) {
+				p.setCurrentfile(filename);
+			}
+		}
 		pr.save(p);
 	}
 	
@@ -93,6 +100,11 @@ public class ValidationService {
 		p.setL2_id(u.getId());
 		p.setL2_datetime(LocalDateTime.now());
 		p.setL2_file(filename);
+		if(filename!=null) {
+			if(!filename.isEmpty()) {
+				p.setCurrentfile(filename);
+			}
+		}
 		pr.save(p);
 		
 		ms.sendmail(ur.findByRole("layer1").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());
@@ -103,6 +115,11 @@ public class ValidationService {
 		p.setL3_id(u.getId());
 		p.setL3_datetime(LocalDateTime.now());
 		p.setL3_file(filename);
+		if(filename!=null) {
+			if(!filename.isEmpty()) {
+				p.setCurrentfile(filename);
+			}
+		}
 		pr.save(p);
 		
 		ms.sendmail(ur.findByRole("layer2").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());

@@ -29,6 +29,7 @@ public class Pending_request implements Request{
 	private String l3_file;
 	private String l2_file;
 	private String l1_file;
+	private String currentfile;
 
 	public Pending_request() {
 		this.approved_by_l3 = false;
@@ -43,7 +44,7 @@ public class Pending_request implements Request{
 	public Pending_request(int id, int user_id, int document_id, String doc_title, LocalDateTime datetime,
 			boolean approved_by_l3, boolean approved_by_l2, boolean approved_by_l1, LocalDateTime l3_datetime,
 			LocalDateTime l2_datetime, LocalDateTime l1_datetime, int l3_id, int l2_id, int l1_id, String user_file,
-			String l3_file, String l2_file, String l1_file) {
+			String l3_file, String l2_file, String l1_file, String currentfile) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -63,6 +64,7 @@ public class Pending_request implements Request{
 		this.l3_file = l3_file;
 		this.l2_file = l2_file;
 		this.l1_file = l1_file;
+		this.currentfile = currentfile;
 	}
 
 	public int getId() {
@@ -212,5 +214,13 @@ public class Pending_request implements Request{
 
 	public void setDoc_title(String doc_title) {
 		this.doc_title = doc_title;
+	}
+
+	public String getCurrentfile() {
+		return currentfile;
+	}
+
+	public void setCurrentfile(String currentfile) {
+		this.currentfile = currentfile;
 	}
 }

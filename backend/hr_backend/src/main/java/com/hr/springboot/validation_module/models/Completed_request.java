@@ -68,16 +68,7 @@ public class Completed_request implements Request{
 		this.l3_id = p.getL3_id();
 		this.l2_id = p.getL2_id();
 		this.l1_id = p.getL1_id();
-		if(!p.getL1_file().equals("")) this.final_file = p.getL1_file();
-		else {
-			if(!p.getL2_file().equals("")) this.final_file = p.getL2_file();
-			else {
-				if(!p.getL3_file().equals("")) this.final_file = p.getL3_file();
-				else {
-					this.final_file = p.getUser_file();
-				}
-			}
-		}
+		this.final_file = p.getCurrentfile();
 		this.doc_title = p.getDoc_title();
 	}
 

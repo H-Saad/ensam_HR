@@ -599,7 +599,12 @@ public class DocService {
 		        Cell cell50 = row2.createCell(++columnCount);
 		        cell50.setCellValue(u.getGenre());
 		        Cell cell60 = row2.createCell(++columnCount);
-		        cell60.setCellValue(u.getDate_naissance().toString());
+		        if(u.getDate_naissance()!= null) {
+		        	cell60.setCellValue(u.getDate_naissance().toString());
+		        }else {
+		        	cell60.setCellValue("");
+		        }
+		        
 		        Cell cell70 = row2.createCell(++columnCount);
 		        cell70.setCellValue(u.getLieu_naissance());
 		        Cell cell80 = row2.createCell(++columnCount);
@@ -609,9 +614,17 @@ public class DocService {
 		        Cell cell1000 = row2.createCell(++columnCount);
 		        cell1000.setCellValue(z);
 		        Cell cell110 = row2.createCell(++columnCount);
-		        cell110.setCellValue(u.getDate_recrutement().toString());
+		        if(u.getDate_recrutement()!= null) {
+		        	cell110.setCellValue(u.getDate_recrutement().toString());
+		        }else {
+		        	cell110.setCellValue("");
+		        }
 		        Cell cell120 = row2.createCell(++columnCount);
-		        cell120.setCellValue(u.getDate_affectation_MESRSFC().toString());
+		        if(u.getDate_affectation_MESRSFC()!= null) {
+		        	cell120.setCellValue(u.getDate_affectation_MESRSFC().toString());
+		        }else {
+		        	cell120.setCellValue("");
+		        }
 		        Cell cell130 = row2.createCell(++columnCount);
 		        cell130.setCellValue(u.getNombre_diplomes());
 		        Cell cell140 = row2.createCell(++columnCount);
