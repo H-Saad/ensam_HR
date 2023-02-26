@@ -61,6 +61,7 @@ public class ValidationService {
 		
 		ms.sendmail(u, md.requestCreated(u, p));
 		ms.sendmail(ur.findByRole("layer3").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());
+		ms.sendmail(ur.findByRole("layer2").get(), md.requestAwaiting(ur.findByRole("layer2").get(), p), p.getUser_file());
 		
 		return p;
 	}
@@ -77,6 +78,7 @@ public class ValidationService {
 		
 		ms.sendmail(u, md.requestCreated(u, p));
 		ms.sendmail(ur.findByRole("layer3").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());
+		ms.sendmail(ur.findByRole("layer2").get(), md.requestAwaiting(ur.findByRole("layer2").get(), p), p.getUser_file());
 		
 		return p;
 	}
@@ -122,7 +124,7 @@ public class ValidationService {
 		}
 		pr.save(p);
 		
-		ms.sendmail(ur.findByRole("layer2").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());
+		ms.sendmail(ur.findByRole("layer1").get(), md.requestAwaiting(ur.findByRole("layer3").get(), p), p.getUser_file());
 		
 		//notifier l'utilisateur que sa requete est approuve
 		//ns.makeNotif(u, ur.findById(p.getUser_id()).get(), p, nd.approvedBy(u, p));

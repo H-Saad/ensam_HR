@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.net.HttpHeaders;
+import com.hr.springboot.jwt.util.JwtUtil;
 import com.hr.springboot.mailing_module.services.MailDict;
 import com.hr.springboot.mailing_module.services.MailService;
 import com.hr.springboot.service_module.services.DocService;
@@ -61,6 +64,9 @@ public class AdminCRUDcontroller {
 	
 	@Autowired
 	private MailDict md;
+	
+	@Autowired
+	private JwtUtil util;
 	
 	
 	/*
@@ -143,24 +149,39 @@ public class AdminCRUDcontroller {
 	@GetMapping("get/{id}")
 	public ResponseEntity<User> get(@PathVariable int id){
 		User u = ur.findById(id).get();
+		u.setPassword("");
 		return ResponseEntity.status(200).body(u);
 	}
 	
 	@PreAuthorize("hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
 	@GetMapping("getAll")
-	public ResponseEntity<List<User>> getAll(){
+	public ResponseEntity<List<User>> getAll(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth){
 		List<User> ret = new ArrayList<User>();
 		List<User> req = ur.findAll();
-		Role r = rr.findById("User").get();
-		for(User u:req) {
-			if(!u.isDisabled() && u.getRole().contains(r)) {
-				u.setPassword("");
-				ret.add(u);
+		Set<Role> s = util.getUserAuthority(auth);
+		Role r = rr.findById("layer1").get();
+		if(s.contains(r)) {
+			for(User u:req) {
+				if(!u.isDisabled()) {
+					u.setPassword("");
+					ret.add(u);
+				}
 			}
-			
+				return ResponseEntity.status(200).body(ret);
+		}else {
+			Role rt = rr.findById("User").get();
+			for(User u:req) {
+				if(!u.isDisabled() && u.getRole().contains(rt)) {
+					u.setPassword("");
+					ret.add(u);
+				}
+				
+			}
+			return ResponseEntity.status(200).body(ret);
+			}
 		}
-		return ResponseEntity.status(200).body(ret);
-	}
+		
+		
 	
 	@PreAuthorize("hasRole('layer3')" + "|| hasRole('layer2')" + "|| hasRole('layer1')")
 	@PostMapping("update")
@@ -262,6 +283,7 @@ public class AdminCRUDcontroller {
 		User u = ur.findById(id).get();
 		HashMap<String,String> ret = new HashMap<String,String>();
 		u.setDisabled(false);
+		ur.save(u);
 		ret.put("status", "success");
 		return ResponseEntity.status(200).body(ret);
 	}
